@@ -3,7 +3,9 @@
 - Files in Program:
     1. bookflights.cpp
     2. flights.txt
+        ```
         ID,origin,destination,emptySeats/totalSeats,depTime,gate,terminal\n
+        ```
     3. passengers.txt
         firstName,lastName,ID,seat
         
@@ -31,10 +33,12 @@
             - PROCEDURE printFlightInfo (`string ID`)
                 1. Search flights.txt for ID
                 2. Print flight info as:
+                    ```
                     Flight B372
                     Mumbai -> Delhi
                     Seats Available: 5/16
                     Departing at: 16:00
+                    ```
     1. CLASS User
         - MEMBERS:
             1. First Name = `int firstName`
@@ -55,49 +59,53 @@
             
 - Main loop:
     1. CASE user’s input OF
-    - 0: Exit Program
-    - 1: [Book flight]->(line 64)
-    - 2: [Display flight info]->(line 86)
-    - OTHERS: Display invalid message, ask for input again
-    ENDCASE
+        - 0: Exit Program
+        - 1: [Book flight]->(line 68)
+        - 2: [Display flight info]->(line 94)
+        - OTHERS: Display invalid message, ask for input again
+        ENDCASE
         
-- Book flight:
-    1. Ask user how they want to book
-    2. CASE user’s choice OF
-    - 0: Go back
-    - 1: [From city route]->(line 73)
-    - 2: [From flight ID]->(line 76)
-    - OTHERS: Display invalid message, ask for input again
-    ENDCASE
+    - Book flight:
+        1. Ask user how they want to book
+        2. CASE user’s choice OF
+            - 0: Go back
+            - 1: [From city route]->(line 76)
+            - 2: [From flight ID]->(line 79)
+            - OTHERS: Display invalid message, ask for input again
+            ENDCASE
         - → From city route:
             1. Get user’s Origin city
             2. Read flights.txt, find and print all flight from user’s Origin
         - → From flight ID:
             1. Read flights.txt, print all flights.
-    3. Ask user which flight, by id, they want to book. Store it in bookedFlight
-    4. Display: “You’re almost done! Let’s get some of your details checked in: ”
-    5. Get user’s full name
-    6. Generate a seat number with 2-digit number <= totalSeats and capital letter <=D
-    7. Write user’s info in passengers.txt
-    8. Display: “All done! Thank you for booking a flight with us.”
-    9. displayBoardingPass()
-    10. Go back to [home page]->(line 56)
+        3. Ask user which flight, by id, they want to book. 
+        4. IF available seats == 0 THEN
+            - Display: “Sorry, this flight is full!”
+            - Go back to [Book flight]->(line 68) page
+        5. Store it in bookedFlight
+        6. Display: “You’re almost done! Let’s get some of your details checked in: ”
+        7. Get user’s full name
+        8. Generate a seat number with 2-digit number <= totalSeats and capital letter <= D
+        9. Write user’s info in passengers.txt
+        10. Display: “All done! Thank you for booking a flight with us.”
+        11. displayBoardingPass()
+        12. Go back to [home page]->(line 60)
 
-- Display flight info:
-    1. Ask user which flight they want to show
-    2. CASE user’s input OF
-    - 0: Go back
-    - 1: [Your flight]->(line 94)
-    - 2: [Flight by ID]->(line 100)
-    - OTHERS: Display invalid message, ask for input again
-    ENDCASE
-        - → User’s flight:
+    - Display flight info:
+        1. Ask user which flight they want to show
+        2. CASE user’s input OF
+            - 0: Go back
+            - 1: [Your flight]->(line 102)
+            - 2: [Flight by ID]->(line 108)
+            - OTHERS: Display invalid message, ask for input again
+            ENDCASE
+        - User’s flight:
             1. Get user’s full name
             2. Search passengers.txt for user
             3. Read user’s flight no.
             4. Search flights.txt for ID
             5. printFlightInfo(ID)
-        - → Flight by id:
+        - Flight by id:
             1. Get flight ID
             2. printFlightInfo(ID)
-    3. Wait for user input (Display “Click Enter to continue...), then go back to [home page]->(line 56)
+        3. Wait for user input (Display “Click Enter to continue...), then go back to [home page]->(line 60)
