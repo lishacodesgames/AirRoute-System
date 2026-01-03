@@ -6,10 +6,16 @@ using namespace std;
 
 # pragma region functions
 
-void printTitle() { // to avoid having to manually replace \033c when i'm on windows
-  cout << "\033c";
+void printTitle() {
+  #if defined(_WIN32)
+    system("cls");
+  #elif defined(__APPLE__)
+    cout << "\033c";
+  #endif
+
   cout << "******************* LISHA'S AMAZING AIRPORT *******************\n";  
 }
+
 bool flightExists(vector<string> FlightIDs, string id) {
   for (string ID : FlightIDs) {
     if(id == ID) return true;
