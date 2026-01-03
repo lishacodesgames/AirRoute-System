@@ -1,2 +1,5 @@
 bookflight
 bookflight.dSYM
+.vscode/tasks.json
+.vscode/launch.json
+.DS_Store
