@@ -1,3 +1,3 @@
-A123,Mumbai,Delhi,5/10,1600,B,2
-M756,Paris,New York,2/8,1151,Y,8
-C944,Delhi,Mumbai,16/18,0451,U,9
+H834|Delhi,DC|10/13|1432|Q|3
+Y795|Paris,Mumbai|11/13|1826|T|8
+Q934|London,Sikkim|3/12|1333|P|4

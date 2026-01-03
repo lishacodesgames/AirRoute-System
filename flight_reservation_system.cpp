@@ -71,11 +71,12 @@ public:
   gate = rand() % 26 + 65;
   terminal = rand() % 9 + 1; // no 0
 
+  // file output
   ofstream flights("flights.txt", ios::app);
 
-  flights << ID << ',' << City1 << ',' << City2 << ',' << emptySeats << '/' << totalSeats << ',';
+  flights << ID << '|' << City1 << ',' << City2 << '|' << emptySeats << '/' << totalSeats << '|';
   flights << setw(2) << setfill('0') << hour << minutes;
-  flights << ',' << gate << ',' << terminal << '\n';
+  flights << '|' << gate << '|' << terminal << '\n';
 
   flights.close();
   }

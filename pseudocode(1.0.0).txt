@@ -4,7 +4,7 @@
     1. bookflights.cpp
     2. flights.txt
         ```
-        ID,origin,destination,emptySeats/totalSeats,depTime,gate,terminal\n
+        ID|origin,destination|emptySeats/totalSeats|depTime|gate|terminal\n
         ```
     3. passengers.txt
         firstName,lastName,ID,seat
