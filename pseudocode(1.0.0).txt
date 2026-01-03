@@ -57,7 +57,7 @@
     1. CASE user’s input OF
     - 0: Exit Program
     - 1: [Book flight]->(line 64)
-    - 2: [Display flight info]->(line 85)
+    - 2: [Display flight info]->(line 86)
     - OTHERS: Display invalid message, ask for input again
     ENDCASE
         
@@ -87,8 +87,8 @@
     1. Ask user which flight they want to show
     2. CASE user’s input OF
     - 0: Go back
-    - 1: [Your flight]->(line 93)
-    - 2: [Flight by ID]->(line 99)
+    - 1: [Your flight]->(line 94)
+    - 2: [Flight by ID]->(line 100)
     - OTHERS: Display invalid message, ask for input again
     ENDCASE
         - → User’s flight:
