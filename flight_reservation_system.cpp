@@ -39,6 +39,7 @@ struct Airport {
 };
 
 class Flight {
+protected:
   string ID, City1, City2;
   int emptySeats, totalSeats;
   string depTime;
@@ -115,6 +116,65 @@ class Flight {
         cout << City1 << " -> " << City2 << '\n';
         cout << "Seats Available: " << emptySeats << '/' << totalSeats << '\n';
         cout << "Departing at: " << depTime << '\n';
+        break;
+      }
+    }
+
+    flights.close();
+  }
+};
+
+class User : public Flight {
+  string firstName, lastName, bookedFlight, seatNumber;
+public:
+  void displayBoardingPass(string fullName) {
+    bool userFound = false;
+    string tempStr;
+
+    //name
+    size_t space = fullName.find(' ');
+    firstName = fullName.substr(0, space);
+    lastName = fullName.substr(space+1, string::npos);
+
+    // parse User
+    ifstream passengers("passengers.txt");
+
+    while(getline(passengers, tempStr, ',')) {
+      if(tempStr != firstName) { getline(passengers, tempStr); continue; }
+      
+      getline(passengers, tempStr, ',');
+      if(tempStr != lastName) { getline(passengers, tempStr); continue; }
+
+      userFound = true;
+      getline(passengers, bookedFlight, ',');
+      getline(passengers, seatNumber);
+      break;
+    }
+    passengers.close();
+
+    if(!userFound) { printTitle(); cout << "Sorry, " << fullName << " is not a passenger on our flight.\n"; }
+
+    // parse Flight
+    ifstream flights("flights.txt");
+
+    while(getline(flights, ID, '|')) {
+      if(ID != bookedFlight) getline(flights, tempStr);
+      else {
+        #pragma region parsing
+          getline(flights, City1, ',');
+          getline(flights, City2, '|');
+          getline(flights, tempStr, '/'); emptySeats = stoi(tempStr);
+          getline(flights, tempStr, '|'); totalSeats = stoi(tempStr);
+          getline(flights, depTime, '|');
+          getline(flights, tempStr, '|'); gate = tempStr[0];
+          getline(flights, tempStr); terminal = stoi(tempStr);
+        #pragma endregion
+
+        printTitle();
+        cout << "NAME OF PASSENGER: " << fullName << '\t' << "SEAT NO. " << seatNumber << '\n';
+        cout << "TO: " << City2 << '\t' << "FROM: " << City1 << '\n';
+        cout << "TIME: " << depTime.substr(0, 2) << ':' << depTime.substr(2, string::npos) << "\n\n";
+        cout << "FLIGHT: " << bookedFlight << '\t' << "GATE " << gate << '\t' << "TERMINAL: " << terminal << '\n';
       }
     }
 
@@ -131,13 +191,9 @@ int main() {
 
   Flight flight;
   Airport lisha;
+  User user;
 
-  flight.printFlightInfo("V311");
-
-  cout << '\n';
-  for(string flight : lisha.flightList) {
-    cout << flight << " ";
-  }
+  user.displayBoardingPass("Lisha Patil");
 
   cout << '\n';
   return 0;
