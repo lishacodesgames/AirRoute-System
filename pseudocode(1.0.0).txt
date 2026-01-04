@@ -1,13 +1,11 @@
 - January 1, 2026 9:52 PM THE SIMPLE SYSTEM (book,show,store)
     
 - Files:
-    1. bookflights.cpp
+    1. flight_reservation_system.cpp
     2. flights.txt
-        ```
-        ID|origin,destination|emptySeats/totalSeats|depTime|gate|terminal\n
-        ```
+//      ID|origin,destination|emptySeats/totalSeats|depTime|gate|terminal\n
     3. passengers.txt
-        firstName,lastName,ID,seat
+//      firstName,lastName,ID,seat
 
 - GLOBALS:
     2. List of Cities = `vector<string> Cities`
@@ -64,13 +62,15 @@
 //                  Departing at: 16:00
     1. CLASS User
         - MEMBERS:
-            1. First Name = `int firstName`
-            2. Last Name = `int lastName`
+            1. First Name = `string firstName`
+            2. Last Name = `string lastName`
             3. ID of Booked Flight = `string bookedFlight`
             4. Seat no. (12A) = `string seatNumber`
         - METHODS:
-            - PROCEDURE displayBoardingPass()
-                1. Read flights.txt for user’s bookedFlight.
+            - PROCEDURE displayBoardingPass(`string fullName`)
+                1. Search passengers.txt for user’s name, parse it all
+                2. Search flights.txt for bookedFlight
+                3. Parse the user's flight
                 2. Print flight info as:
 //              NAME OF PASSENGER: user's Full Name \t SEAT NO. seat
 //              TO: destination \t FROM: origin
