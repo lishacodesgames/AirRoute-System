@@ -1,12 +1,14 @@
 #include <ctime>
 #include <fstream>
 #include <iostream>
+#include <vector>
+#include <iomanip> //for std::setfill() & setw()
 using namespace std;
 vector<string> Cities = {"Mumbai", "Delhi", "New York", "Dallas", "DC", "Paris",  "Tokyo", "London",   "Rome",   "Sikkim"};
 
 #pragma region functions
 
-void printTitle() {
+void clrscr() {
 #if defined(_WIN32)
   system("cls");
 #elif defined(__APPLE__)
@@ -152,7 +154,7 @@ public:
     }
     passengers.close();
 
-    if(!userFound) { printTitle(); cout << "Sorry, " << fullName << " is not a passenger on our flight.\n"; }
+    if(!userFound) { clrscr(); cout << "Sorry, " << fullName << " is not a passenger on our flight.\n"; }
 
     // parse Flight
     ifstream flights("flights.txt");
@@ -170,7 +172,7 @@ public:
           getline(flights, tempStr); terminal = stoi(tempStr);
         #pragma endregion
 
-        printTitle();
+        clrscr();
         cout << "NAME OF PASSENGER: " << fullName << '\t' << "SEAT NO. " << seatNumber << '\n';
         cout << "TO: " << City2 << '\t' << "FROM: " << City1 << '\n';
         cout << "TIME: " << depTime.substr(0, 2) << ':' << depTime.substr(2, string::npos) << "\n\n";
@@ -187,7 +189,7 @@ public:
 //* MAIN FUNCTION
 int main() {
   srand(time(0));
-  printTitle();
+  clrscr();
 
   Flight flight;
   Airport lisha;
