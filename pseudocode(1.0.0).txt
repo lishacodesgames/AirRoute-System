@@ -10,7 +10,7 @@
 - GLOBALS:
     2. List of Cities = `vector<string> Cities`
 
-- Functions:
+- FUNCTIONS:
     - PROCEDURE printTitle()
         1. Clear terminal:
 *           IF OS = Windows THEN `system(”cls”);`
@@ -19,9 +19,9 @@
         2. Display title surrounded by asterisks: 
 //          ******************* LISHA'S AMAZING AIRPORT *******************` 
 
-- Classes:
+- CLASSES:
     1. STRUCT Airport
-        !!! Airport object must be declared after Flight.
+        ! Airport object must be declared after Flight.
         - MEMBERS:
             1. List of flights = `vector<string> flightList`
         - METHODS:
@@ -60,7 +60,7 @@
 //                  Mumbai -> Delhi
 //                  Seats Available: 5/16
 //                  Departing at: 16:00
-    1. CLASS User
+    1. CLASS User : private Flight
         - MEMBERS:
             1. First Name = `string firstName`
             2. Last Name = `string lastName`
@@ -71,10 +71,13 @@
                 1. Search passengers.txt for user’s name, parse it all
                 2. Search flights.txt for bookedFlight
                 3. Parse the user's flight
-                2. Print flight info as:
+                4. Print flight info as:
 //              NAME OF PASSENGER: user's Full Name \t SEAT NO. seat
 //              TO: destination \t FROM: origin
 //              TIME: time of departure
+//                  
+//              FLIGHT: flight
+//              GATE gate \t TERMINAL terminal
             
 - Main loop:
 *    1. CASE user’s input OF
