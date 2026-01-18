@@ -82,8 +82,8 @@
 - Main loop:
 *    1. CASE user’s input OF
 *       - 0: Exit Program
-*       - 1: [Book flight]->(line 68)
-*       - 2: [Display flight info]->(line 94)
+*       - 1: [Book flight]->(line 90)
+*       - 2: [Display flight info]->(line 116)
 *       - OTHERS: Display invalid message, ask for input again
 *       ENDCASE
         
@@ -91,8 +91,8 @@
         1. Ask user how they want to book
 *       2. CASE user’s choice OF
 *           - 0: Go back
-*           - 1: [From city route]->(line 76)
-*           - 2: [From flight ID]->(line 79)
+*           - 1: [From city route]->(line 98)
+*           - 2: [From flight ID]->(line 101)
 *           - OTHERS: Display invalid message, ask for input again
 *           ENDCASE
         - From city route:
@@ -117,8 +117,8 @@
         1. Ask user which flight they want to show
 *       2. CASE user’s input OF
 *           - 0: Go back
-*           - 1: [Your flight]->(line 102)
-*           - 2: [Flight by ID]->(line 108)
+*           - 1: [Your flight]->(line 124)
+*           - 2: [Flight by ID]->(line 130)
 *           - OTHERS: Display invalid message, ask for input again
 *           ENDCASE
         - User’s flight:

@@ -220,11 +220,11 @@ class User : private Flight {
 int main() {
   srand(time(0));
   clrscr();
-
+  
   Flight flight;
   Airport lisha;
   User user;
-
+  
   choose:
   int choice;
   cout << "0. Exit Program\n";
@@ -241,7 +241,32 @@ int main() {
       exit(0);
 
     case 1: 
-      cout << "1";
+      book:
+      cout << "0. Go back\n";
+      cout << "1. Book from City Route\n";
+      cout << "2. Book from Flight ID\n";
+      cout << "What would you like to do? ";
+      cin >> choice;
+
+      clrscr();
+
+      switch(choice) {
+        case 0:
+          goto choose;
+
+        case 1:
+          cout << "1";
+          break;
+
+        case 2:
+          cout << "2";
+          break;
+          
+        default:
+          cout << "Invalid choice. Please choose again.\n\n";
+          goto book;
+      }
+
       break;
     
     case 2:
