@@ -1,0 +1,261 @@
+// files
+// "cities.txt" - list of city names, one per line
+// "flights.txt" - list of flight IDs, one per line
+// "flightsInfo.txt" - all Flight class values separated by commas
+// "passengers.txt" - all Passenger class values separated by commas
+
+// functions
+
+   //TODO to simplify file searching process. Index+1 = line@which flight/city is there 
+FUNCTION getIndex(element : STRING, arr : VECTOR OF STRING) RETURNS INTEGER
+   FOR i FROM 0 TO LENGTH(arr) - 1 DO
+      IF arr[i] == element THEN
+         RETURN i
+      ENDIF
+   NEXT
+   RETURN -1
+ENDFUNCTION
+
+PROCEDURE printTitle()
+	IF OS == "Windows" THEN
+		SYSTEM("cls")
+   ELSE
+		cout << "\033c";
+   ENDIF
+   PRINT "==============================="
+   PRINT "  WELCOME TO LISHA'S AIRPORT!  "
+   PRINT "==============================="
+ENDPROCEDURE
+
+//classes
+CLASS Airport
+   PROTECTED:
+      DECLARE flights : VECTOR OF STRING
+      DECLARE cities : VECTOR OF STRING
+   PUBLIC:
+      PROCEDURE NEW()
+         CALL getFlights()
+         CALL getCities()
+      ENDPROCEDURE
+
+      PROCEDURE getFlights()
+         flights <- []
+         DECLARE id : STRING
+         OPENFILE "flights.txt" FOR READ
+         WHILE NOT EOF("flights.txt") DO
+            READLINE "flights.txt" INTO id
+            APPEND id TO flights
+         ENDWHILE
+         CLOSEFILE "flights.txt"
+      ENDPROCEDURE
+
+      PROCEDURE getCities()
+         cities <- []
+         DECLARE city : STRING
+         OPENFILE "cities.txt" FOR READ
+         WHILE NOT EOF("cities.txt") DO
+            READLINE "cities.txt" INTO city
+            APPEND city TO cities
+         ENDWHILE
+         CLOSEFILE "cities.txt"
+      ENDPROCEDURE
+ENDCLASS
+
+CLASS Flight INHERITS Airport
+  PROTECTED:
+      CONST MIN_SEATS = 50
+      CONST MAX_SEATS = 500
+
+		DECLARE ID : STRING
+		DECLARE origin : STRING
+		DECLARE destination : STRING
+		DECLARE emptySeats : INTEGER
+		DECLARE totalSeats : INTEGER
+		DECLARE departureTime : STRING
+		DECLARE gate : CHAR
+		DECLARE terminal : INTEGER
+  	PUBLIC:
+      PROCEDURE generateRandomFlight()
+         // ID
+         ID <- TOCHAR(64 + RANDOM(1, 26)) + TOSTRING(RANDOM(100, 999))
+
+         // origin and destination
+         origin <- cities[RANDOM(0, LENGTH(cities) - 1)]
+         REPEAT
+            destination <- cities[RANDOM(0, LENGTH(cities) - 1)]
+         UNTIL origin != destination
+         
+         // seats
+         totalSeats <- 10 * RANDOM(MIN_SEATS/10, MAX_SEATS/10)
+         emptySeats <- RANDOM(0, totalSeats)
+         
+         // departure time
+         DECLARE minuteIncrements : ARRAY[0:3] OF STRING
+         minuteIncrements <- ["00", "15", "30", "45"]
+         DECLARE hour : STRING
+         hour <- TOSTRING(RANDOM(0, 23))
+         IF LENGTH(hour) == 1 THEN
+            hour <- "0" + hour
+         ENDIF
+
+         departureTime <- hour + ":" + minuteIncrements[RANDOM(0, 3)]
+         
+         // gate and terminal
+         gate <- CHAR(64 + RANDOM(1, 26))
+         terminal <- RANDOM(1, 5)
+      ENDPROCEDURE
+
+   PROCEDURE printFlightInfo(
+      ID : STRING, 
+      origin : STRING, 
+      destination : STRING, 
+      emptySeats : INTEGER, 
+      totalSeats : INTEGER, 
+      departureTime : STRING, 
+      gate : CHAR, 
+      terminal : INTEGER
+   ) 
+      PRINT "Flight " + ID
+      PRINT origin + " -> " + destination
+      PRINT "Seats available: " + emptySeats + "/" + totalSeats
+      PRINT "Departing at: " + departureTime
+      PRINT "Gate: " + gate + "\t Terminal: " + terminal
+   ENDPROCEDURE
+
+   PROCEDURE displayAllFlights() //TODO add ways to filter flights by origin/destination/time
+      OPENFILE "flightsInfo.txt" FOR READ
+      WHILE NOT EOF("flightsInfo.txt") DO
+         DECLARE tempString : STRING
+         READLINE "flightsInfo.txt" INTO ID TILL "|"
+         READLINE "flightsInfo.txt" INTO origin TILL ","
+         READLINE "flightsInfo.txt" INTO destination TILL "|"
+         READLINE "flightsInfo.txt" INTO tempString TILL "/"
+         emptySeats <- TOINTEGER(tempString)
+         READLINE "flightsInfo.txt" INTO tempString TILL "|"
+         totalSeats <- TOINTEGER(tempString)
+         READLINE "flightsInfo.txt" INTO departureTime TILL "|"
+         READLINE "flightsInfo.txt" INTO tempString TILL "|"
+         gate <- tempString[0]
+         READLINE "flightsInfo.txt" INTO tempString
+         terminal <- TOINTEGER(tempString)
+         CALL printFlightInfo(ID, origin, destination, emptySeats, totalSeats, departureTime, gate, terminal)
+      ENDWHILE
+      CLOSEFILE "flightsInfo.txt"
+   ENDPROCEDURE
+ENDCLASS
+
+CLASS Passenger
+   PRIVATE:
+      DECLARE name : STRING
+      DECLARE age : INTEGER // ∈ [1, 99]
+      DECLARE bookedFlight : STRING
+      DECLARE seat : STRING // 2-digit number <= totalSeats/5 + CHAR(A-E)
+   PUBLIC:
+      PROCEDURE bookFlight() //TODO, V0.2.0
+         PRINT "Booking a flight..."
+      ENDPROCEDURE
+
+      //TODO add other ways to access boarding pass
+      FUNCTION displayBoardingPass() RETURNS BOOLEAN
+         DECLARE tempString : STRING
+         DECLARE nameInput : STRING
+         INPUT "Enter name of passenger: " INTO nameInput
+         
+         // get passenger info
+         DECLARE passengerExists = FALSE : BOOLEAN
+         OPENFILE "passengers.txt" FOR READ
+         WHILE NOT EOF("passengers.txt") DO
+            READLINE "passengers.txt" INTO THIS.name TILL ","
+
+            IF THIS.name != nameInput THEN
+               READLINE "passengers.txt" INTO tempString
+               CONTINUE
+            ENDIF
+
+            passengerExists <- TRUE
+            READLINE "passengers.txt" INTO tempString TILL ","
+            age <- TOINTEGER(tempString)
+            READLINE "passengers.txt" INTO bookedFlight TILL ","
+            READLINE "passengers.txt" INTO seat
+         ENDWHILE
+         CLOSEFILE "passengers.txt"
+
+         IF NOT passengerExists THEN
+            PRINT name + " does not have a boarding pass."
+            RETURN FALSE
+         ENDIF
+
+         // get flight info
+         OPENFILE "flightsInfo.txt" FOR READ
+         WHILE NOT EOF("flightsInfo.txt") DO
+            READLINE "flightsInfo.txt" INTO ID TILL "|"
+            IF ID != bookedFlight THEN
+               READLINE "flightsInfo.txt" INTO tempString
+               CONTINUE
+            ENDIF
+            READLINE "flightsInfo.txt" INTO origin TILL ","
+            READLINE "flightsInfo.txt" INTO destination TILL "|"
+            READLINE "flightsInfo.txt" INTO tempString TILL "/"
+            emptySeats <- TOINTEGER(tempString)
+            READLINE "flightsInfo.txt" INTO tempString TILL "|"
+            totalSeats <- TOINTEGER(tempString)
+            READLINE "flightsInfo.txt" INTO departureTime TILL "|"
+            READLINE "flightsInfo.txt" INTO tempString TILL "|"
+            gate <- tempString[0]
+            READLINE "flightsInfo.txt" INTO tempString
+            terminal <- TOINTEGER(tempString)
+         ENDWHILE
+         CLOSEFILE "flightsInfo.txt"
+
+         // print everything
+         PRINT "NAME OF PASSENGER: " + name + "\t AGE: " + TOSTRING(age)
+         PRINT "SEAT NO. " + seat
+         PRINT "TO: " + destination + "\t FROM: " + origin
+         PRINT "TIME: " + departureTime
+         PRINT "FLIGHT: " + bookedFlight + "\t GATE: " + gate + "\t TERMINAL: " + TOSTRING(terminal)
+
+         RETURN TRUE
+      ENDFUNCTION
+ENDCLASS
+
+// MAIN
+CALL printTitle()
+cities <- searchCities()
+DECLARE flight : Flight
+DECLARE passenger : Passenger
+
+DECLARE choice : INTEGER
+WHILE TRUE
+   PRINT "0. Exit"
+   PRINT "1. Book a flight"
+   PRINT "2. View flight information"
+   PRINT "3. View boarding pass"
+   PRINT "4. View all flights"
+   INPUT "Enter your choice: " INTO choice
+   DECLARE tempString : STRING
+
+   CALL printTitle() 
+   CASE OF choice
+      case 0 : EXIT PROGRAM
+      case 1 : 
+         CALL passenger.bookFlight()
+         BREAK
+      case 2 : 
+         INPUT "Enter flight ID: " INTO tempString
+         CALL flight.printFlightInfo(tempString)
+         BREAK
+      case 3 : 
+         WHILE TRUE
+            IF passenger.displayBoardingPass() THEN
+               BREAK
+            ENDIF
+         ENDWHILE
+         BREAK
+      case 4 :
+         CALL flight.displayAllFlights()
+         BREAK
+      OTHERWISE :
+         PRINT "Invalid choice!"
+         BREAK
+   ENDCASE
+ENDWHILE
