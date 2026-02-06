@@ -125,13 +125,13 @@ public:
     * prints them in a nice format (if needed)
     */
    //TODO add a way to filter flight with origin/destination/time
-   void getFlightInfo(string id, bool toBePrinted) {
+   bool getFlightInfo(string id, bool toBePrinted) {
       #pragma region confirmID
       int index = getIndex(id, flights);
       if(index == -1) {
          printTitle();
          cout << "Flight " << id << " does not exist.\n";
-         return;
+         return false;
       }
       #pragma endregion
 
@@ -161,6 +161,8 @@ public:
 
       if(toBePrinted)
          printFlightInfo();
+
+      return true;
    }
    
    /// @brief prints just-parsed flight info in a nice format
@@ -169,14 +171,13 @@ public:
       cout << origin << " -> " << destination << "\n";
       cout << "Seats available: " << emptySeats << "/" << totalSeats << "\n";
       cout << "Departing at " << departureTime << "\n";
-      cout << "Gate " << gate << "\t Terminal " << terminal;
+      cout << "Gate " << gate << "\t Terminal " << terminal << "\n\n";
    }
 
    //TODO add ways to filter flights by origin/destination/time
    void displayAllFlights() {
       for(string flightID : flights) {
          getFlightInfo(flightID, true);
-         cout << "\n\n";
       }
    }
 };
@@ -211,7 +212,9 @@ public:
          age = stoi(tempString);
          getline(passengers, bookedFlight, ',');
          getline(passengers, seat);
+         break;
       }
+
       passengers.close();
       #pragma endregion
 
@@ -245,8 +248,76 @@ public:
 int main() {
    srand(time(0));
    Viewer program;
-   system("cls");
+   printTitle();
    
+   int choice;
+   while(true) {
+      printTitle();
+      cout << "===============================\n";
+      cout << "[0] Exit\n";
+      cout << "[1] Book a flight\n";
+      cout << "[2] View flight information\n";
+      cout << "[3] View boarding pass\n";
+      cout << "[4] View all flights\n";
+      cout << "===============================\n";
+      cout << "Enter your choice: ";
+      cin >> choice;
+
+      string temp;
+      bool success;
+      switch(choice){
+         case 0: return 0;
+
+         case 1:
+            printTitle();
+            cout << "Booking a flight...";// TODO
+            cin.get(); cin.get();
+            break;
+
+         case 2:
+            while(true){
+               printTitle();
+               cout << "Enter flight ID: ";
+               cin >> temp;
+               
+               printTitle();
+               success = program.getFlightInfo(temp, true);
+               cin.get(); cin.get();
+               if(success)
+                  break;
+               cout << "Try again? (y/n) ";
+               cin >> temp; 
+               if(temp == "n")
+                  break;
+            }
+            break;
+
+         case 3:
+            while(true){
+               printTitle();
+               success = program.displayBoardingPass();
+               cin.get(); cin.get();
+               if(success)
+                  break;
+               cout << "Try again? (y/n) ";
+               cin >> temp;
+               if(temp == "n")
+                  break;
+            }
+            break;
+
+         case 4:
+            printTitle();  
+            program.displayAllFlights();
+            cin.get(); cin.get();
+            break;
+         default:
+            printTitle();
+            cout << "Invalid Choice.";
+            cin.get(); cin.get();
+            break;
+      }
+   }
    
    cout << "\n\n";
    return 0;

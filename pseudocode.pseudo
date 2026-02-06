@@ -128,18 +128,21 @@ CLASS Flight INHERITS Airport
       // reads all values
       // prints them in a nice format
       //TODO add a way to filter flight with origin / destination / time
-      PROCEDURE getFlightInfo(id : STRING, toBePrinted : BOOLEAN)
-      #region confirmID
+      FUNCTION getFlightInfo(id : STRING, toBePrinted : BOOLEAN) RETURNS BOOLEAN
+         
+         #region confirmID
          DECLARE index : INTEGER
          index <- getIndex(id, flights)
          IF index == -1 THEN
             CALL printTitle()
             PRINT "Flight " + id + " does not exist."
-            RETURN
+            RETURN FALSE
          ENDIF
-      #endregion
+         #endregion
+
          DECLARE tempString : STRING
-      #region readValues
+         
+         #region readValues
          OPENFILE "flightsInfo.txt" FOR READ
 
          FOR i <- 0 TO index-1 // index = line so skips = index
@@ -159,11 +162,13 @@ CLASS Flight INHERITS Airport
          READLINE "flightsInfo.txt" INTO tempString
          terminal <- TOINTEGER(tempString)
          CLOSEFILE "flightsInfo.txt"
-      #endregion
+         #endregion
       IF toBePrinted THEN
          CALL printFlightInfo()
       ENDIF
-      ENDPROCEDURE
+
+      RETURN TRUE
+      ENDFUNCTION
 
       /// @brief prints just-parsed flight info in a nice format
       PROCEDURE printFlightInfo()
@@ -171,13 +176,12 @@ CLASS Flight INHERITS Airport
          PRINT origin + " -> " + destination
          PRINT "Seats available: " + emptySeats + "/" + totalSeats
          PRINT "Departing at " + departureTime
-         PRINT "Gate " + gate + "\t Terminal " + terminal
+         PRINT "Gate " + gate + "\t Terminal " + terminal + "\n\n"
       ENDPROCEDURE
 
       PROCEDURE displayAllFlights() //TODO add ways to filter flights by origin/destination/time
          FOREACH flightID IN flights DO
             CALL getFlightInfo(flightID, TRUE)
-            PRINT "\n\n"
          ENDFOREACH
       ENDPROCEDURE
 ENDCLASS
@@ -198,9 +202,10 @@ CLASS Viewer INHERITS Passenger, Flight
          printTitle()
          INPUT "Enter name of passenger: " INTO nameInput
          
-      #region getPassengerInfo
+         #region getPassengerInfo
          DECLARE passengerExists = FALSE : BOOLEAN
          OPENFILE "passengers.txt" FOR READ
+
          WHILE READLINE "passengers.txt" INTO THIS.name TILL ',' == SUCCESSFUL DO
             IF THIS.name != nameInput THEN
                READLINE "passengers.txt" INTO tempString
@@ -212,9 +217,11 @@ CLASS Viewer INHERITS Passenger, Flight
             age <- TOINTEGER(tempString)
             READLINE "passengers.txt" INTO bookedFlight TILL ","
             READLINE "passengers.txt" INTO seat
+            BREAK
          ENDWHILE
+
          CLOSEFILE "passengers.txt"
-      #endregion
+         #endregion
 
          IF NOT passengerExists THEN
             printTitle()
@@ -222,7 +229,7 @@ CLASS Viewer INHERITS Passenger, Flight
             RETURN FALSE
          ENDIF
 
-      #region printInfo
+         #region printInfo
          CALL getFlightInfo(bookedFlight, FALSE)
 
          printTitle()
@@ -232,7 +239,7 @@ CLASS Viewer INHERITS Passenger, Flight
          PRINT "TIME: " + departureTime
          PRINT "FLIGHT: " + bookedFlight
          PRINT "GATE " + gate + "\t TERMINAL " + terminal
-      #endregion
+         #endregion
 
          RETURN TRUE
       ENDFUNCTION
@@ -244,12 +251,13 @@ CLASS Booker INHERITS Passenger, Flight
 ENDCLASS
 
 // MAIN
+SET RANDOM SEED TO CURRENT TIME
+DECLARE program : Viewer
 CALL printTitle()
-DECLARE flight : Flight
-DECLARE passenger : Passenger
 
 DECLARE choice : INTEGER
 WHILE TRUE
+   CALL printTitle()
    PRINT "==============================="
    PRINT "[0] Exit"
    PRINT "[1] Book a flight"
@@ -258,35 +266,60 @@ WHILE TRUE
    PRINT "[4] View all flights"
    PRINT "==============================="
    INPUT "Enter your choice: " INTO choice
-   DECLARE tempString : STRING
 
-   CALL printTitle() 
+   DECLARE temp : STRING
+   DECLARE success : BOOLEAN
    CASE OF choice
       case 0 : EXIT PROGRAM
+      
       case 1 : 
-         // TODO
+         CALL printTitle()
+         PRINT "Booking a flight..." //TODO
+         GETCH()
          BREAK
+      
       case 2 : 
-         INPUT "Enter flight ID: " INTO tempString
-         CALL flight.getFlightInfo(tempString, TRUE)
-         BREAK
-      case 3 : 
          WHILE TRUE
-            IF passenger.displayBoardingPass() THEN
+            CALL printTitle()
+            INPUT "Enter flight ID: " INTO temp
+
+            CALL printTitle()
+            success <- program.getFlightInfo(temp, TRUE)
+            GETCH()
+            IF success THEN
                BREAK
-            ELSE
-               INPUT "Try again? (y/n) " INTO tempString
-               IF tempString != "y" THEN
-                  BREAK
-               ENDIF
+            ENDIF
+            INPUT "Try again? (y/n) " INTO temp
+            IF temp == "n" THEN
+               BREAK
             ENDIF
          ENDWHILE
          BREAK
+
+      case 3 : 
+         WHILE TRUE
+            CALL printTitle()
+            success <- program.displayBoardingPass()
+            GETCH()
+            IF success THEN
+               BREAK
+            ENDIF
+            INPUT "Try again? (y/n) " INTO temp
+            IF temp == "n" THEN
+               BREAK
+            ENDIF
+         ENDWHILE
+         BREAK
+
       case 4 :
-         CALL flight.displayAllFlights()
+         CALL printTitle()
+         CALL program.displayAllFlights()
+         GETCH()
          BREAK
       OTHERWISE :
+         CALL printTitle()
          PRINT "Invalid choice!"
+         GETCH()
          BREAK
    ENDCASE
 ENDWHILE
