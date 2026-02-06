@@ -9,7 +9,8 @@ using namespace std;
 
 int getIndex(string& element, vector<string>& vec) {
    for(int i = 0; i < vec.size(); i++){
-      if(element == vec[i]) return i;
+      if(element == vec[i]) 
+         return i;
    }
    return -1;
 }
@@ -80,7 +81,7 @@ public:
    void generateRandomFlight() {
       #pragma region generateValues
       // ID
-      ID = (char)(65 + rand()%26) + to_string(rand() % 900 + 100);
+      ID = (char)(65 + rand() % 26) + to_string(rand() % 900 + 100);
 
       // cities
       origin = cities[rand() % cities.size()];
@@ -117,6 +118,13 @@ public:
       #pragma endregion
    }
 
+   /** @brief
+    * gets index of flight by ID
+    * goes to that line in flightsInfo.txt
+    * reads all values
+    * prints them in a nice format (if needed)
+    */
+   //TODO add a way to filter flight with origin/destination/time
    void getFlightInfo(string id, bool toBePrinted) {
       #pragma region confirmID
       int index = getIndex(id, flights);
@@ -155,6 +163,7 @@ public:
          printFlightInfo();
    }
    
+   /// @brief prints just-parsed flight info in a nice format
    void printFlightInfo() {
       cout << "Flight " << ID << "\n";
       cout << origin << " -> " << destination << "\n";
@@ -163,6 +172,7 @@ public:
       cout << "Gate " << gate << "\t Terminal " << terminal;
    }
 
+   //TODO add ways to filter flights by origin/destination/time
    void displayAllFlights() {
       for(string flightID : flights) {
          getFlightInfo(flightID, true);
@@ -195,6 +205,7 @@ public:
             getline(passengers, tempString);
             continue;
          }
+
          passengerExists = true;
          getline(passengers, tempString, ',');
          age = stoi(tempString);
@@ -220,11 +231,15 @@ public:
       cout << "TIME: " << departureTime << "\n";
       cout << "FLIGHT: " << bookedFlight << "\n";
       cout << "GATE " << gate << "\t TERMINAL " << terminal << "\n";
-
       #pragma endregion
       
       return true;
    }
+};
+
+class Booker : public Flight, public Passenger {
+public:
+
 };
 
 int main() {
@@ -232,7 +247,6 @@ int main() {
    Viewer program;
    system("cls");
    
-   program.displayBoardingPass();
    
    cout << "\n\n";
    return 0;

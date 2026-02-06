@@ -23,10 +23,10 @@ PROCEDURE printTitle()
    ELSE
 		cout << "\033c";
    ENDIF
+
    PRINT "==============================="
    PRINT "  WELCOME TO LISHA'S AIRPORT!  "
-   PRINT "==============================="
-   PRINT ""
+   PRINT "===============================\n\n"
 ENDPROCEDURE
 
 //classes
@@ -45,8 +45,7 @@ CLASS Airport
          DECLARE flights : VECTOR OF STRING
 
          OPENFILE "flights.txt" FOR READ
-         WHILE NOT EOF("flights.txt") DO
-            READLINE "flights.txt" INTO id
+         WHILE READLINE "flights.txt" INTO id == SUCCESSFUL DO
             APPEND id TO flights
          ENDWHILE
          CLOSEFILE "flights.txt"
@@ -59,8 +58,7 @@ CLASS Airport
          DECLARE cities : VECTOR OF STRING
 
          OPENFILE "cities.txt" FOR READ
-         WHILE NOT EOF("cities.txt") DO
-            READLINE "cities.txt" INTO city
+         WHILE READLINE "cities.txt" INTO city == SUCCESSFUL DO
             APPEND city TO cities
          ENDWHILE
          CLOSEFILE "cities.txt"
@@ -75,10 +73,8 @@ CLASS Flight INHERITS Airport
       CONST MAX_SEATS = 500
 
 		DECLARE ID : STRING
-		DECLARE origin : STRING
-		DECLARE destination : STRING
-		DECLARE emptySeats : INTEGER
-		DECLARE totalSeats : INTEGER
+		DECLARE origin, destination : STRING
+		DECLARE emptySeats, totalSeats : INTEGER
 		DECLARE departureTime : STRING
 		DECLARE gate : CHAR
 		DECLARE terminal : INTEGER
@@ -88,7 +84,7 @@ CLASS Flight INHERITS Airport
          // ID
          ID <- TOCHAR(64 + RANDOM(1, 26)) + TOSTRING(RANDOM(100, 999))
 
-         // origin and destination
+         // cities
          origin <- cities[RANDOM(0, LENGTH(cities) - 1)]
          REPEAT
             destination <- cities[RANDOM(0, LENGTH(cities) - 1)]
@@ -131,7 +127,8 @@ CLASS Flight INHERITS Airport
       // goes to that line in flightsInfo.txt
       // reads all values
       // prints them in a nice format
-      PROCEDURE getFlightInfo(id : STRING, toBePrinted : BOOLEAN) //TODO add a way to filter flight with origin/destination/time
+      //TODO add a way to filter flight with origin / destination / time
+      PROCEDURE getFlightInfo(id : STRING, toBePrinted : BOOLEAN)
       #region confirmID
          DECLARE index : INTEGER
          index <- getIndex(id, flights)
@@ -180,6 +177,7 @@ CLASS Flight INHERITS Airport
       PROCEDURE displayAllFlights() //TODO add ways to filter flights by origin/destination/time
          FOREACH flightID IN flights DO
             CALL getFlightInfo(flightID, TRUE)
+            PRINT "\n\n"
          ENDFOREACH
       ENDPROCEDURE
 ENDCLASS
@@ -203,9 +201,7 @@ CLASS Viewer INHERITS Passenger, Flight
       #region getPassengerInfo
          DECLARE passengerExists = FALSE : BOOLEAN
          OPENFILE "passengers.txt" FOR READ
-         WHILE NOT EOF("passengers.txt") DO
-            READLINE "passengers.txt" INTO THIS.name TILL ","
-
+         WHILE READLINE "passengers.txt" INTO THIS.name TILL ',' == SUCCESSFUL DO
             IF THIS.name != nameInput THEN
                READLINE "passengers.txt" INTO tempString
                CONTINUE
