@@ -247,6 +247,11 @@ ENDCLASS
 
 CLASS Booker INHERITS Passenger, Flight
    PUBLIC:
+      PROCEDURE bookFlight()
+         // TODO
+         CALL displayOptions()
+      ENDPROCEDURE
+
       FUNCTION displayOptions() RETURNS STRING //TODO
          DECLARE choice : INTEGER
          DECLARE temp : STRING
@@ -364,26 +369,63 @@ CLASS Booker INHERITS Passenger, Flight
             index <- getIndex(city, cities)
             
             IF index == -1 THEN
-               printTitle()
+               CALL printTitle()
                PRINT city + " does not exist." //TODO add ways to check if a city doesn't have a flight
                INPUT "Would you like to try again? (y/n) " INTO temp
                IF temp == 'n' THEN
                   RETURN ""
                ENDIF
+            ELSE
+               BREAK
             ENDIF
          ENDWHILE
          RETURN city
       ENDFUNCTION
 
       FUNCTION getID(validFlights : VECTOR OF STRING) RETURNS STRING
-         PRINT "==============================="
-         //TODO
+         // GET ID
+         // if IDvalid, return it
+         // if ID not in validFlights, check if it's in flights
+         // if ID not in both, display invalid message and somehow loop back without erasing display of all flights
+         // if ID not in validFliths but in flights, display message + "would you like to book flight <ID> anyways? (y/n)" if yes, return ID, if no, loop back
+         DECLARE IDvalid : BOOLEAN // delete?
+         DECLARE flightIndex : INTEGER
+         DECLARE validIndex : INTEGER
+         DECLARE temp : CHAR
+
+         INPUT "Enter flight ID: " INTO ID
+         validIndex <- getIndex(ID, validFlights)
+         IF validIndex != -1 THEN
+            RETURN ID // valid ID, can book
+         ENDIF
+
+         flightIndex <- getIndex(ID, flights)
+         IF flightIndex != -1 THEN // ID exists but doesn't match criteria
+            CALL printTitle()
+            PRINT "Flight " + ID + " does not match the selected criteria."
+            PRINT "Would you like to book flight " + ID + " anyways? (y/n) " INTO temp
+            IF temp == 'y' THEN
+               RETURN ID
+            ELSE
+               RETURN displayOptions()
+            ENDIF
+         ENDIF
+
+         // flight doesn't exist
+         PRINT "Flight " + ID + " does not exist."
+         INPUT "Please enter valid flight ID, or '0' to go back: " INTO ID
+         IF ID == "0" THEN
+            RETURN displayOptions()
+         ENDIF
+         
+         RETURN getID(validFlights) // recursion to loop back
       ENDFUNCTION
 ENDCLASS
 
 // MAIN
 SET RANDOM SEED TO CURRENT TIME
 DECLARE program : Viewer
+DECLARE manager : Booker
 CALL printTitle()
 
 DECLARE choice : INTEGER
@@ -405,6 +447,7 @@ WHILE TRUE
       
       case 1 : 
          CALL printTitle()
+         CALL manager.bookFlight()
          PRINT "Booking a flight..." //TODO
          GETCH()
          BREAK
