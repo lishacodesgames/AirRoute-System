@@ -11,9 +11,9 @@ using namespace std;
  * where does FlightStorage::getFlight() get index from? 
  */
 
-#pragma region FUNCTIONS
+#pragma region FUNCTIONS //done
 
-int getIndex(string& element, vector<string>& vec) { // done
+int getIndex(string& element, vector<string>& vec) { //done
    for(int i = 0; i < vec.size(); i++){
       if(element == vec[i]) 
          return i;
@@ -21,7 +21,7 @@ int getIndex(string& element, vector<string>& vec) { // done
    return -1;
 }
 
-void printTitle() {
+void printTitle() { //done
    #if defined(_WIN32)
       system("cls");
    #elif defined(__APPLE__)
@@ -72,7 +72,7 @@ public:
    }
 };
 
-class Flight : public Airport {
+class Flight : public Airport { //done
    protected: //done
       const int MIN_SEATS = 50; 
       const int MAX_SEATS = 500;
@@ -84,7 +84,7 @@ class Flight : public Airport {
       char gate;
       short terminal;
 public:
-   void generateRandomFlight() {
+   void generateRandomFlight() { //done
       #pragma region generateValues
       // ID
       ID = (char)(65 + rand() % 26) + to_string(rand() % 900 + 100);
@@ -179,7 +179,7 @@ public:
    }
    
    /// @brief prints just-parsed flight info in a nice format
-   void printFlightInfo() {
+   void printFlightInfo() { //done
       cout << "Flight " << ID << "\n";
       cout << origin << " -> " << destination << "\n";
       cout << "Seats available: " << emptySeats << "/" << totalSeats << "\n";
@@ -188,14 +188,14 @@ public:
    }
 
    //TODO add ways to filter flights by origin/destination/time
-   void displayAllFlights() {
+   void displayAllFlights() { //dneo
       for(string flightID : flights) {
          getFlightInfo(flightID, true);
       }
    }
 };
 
-class Passenger {
+class Passenger { //done
 protected:
    string name;
    int age; // ∈ [1, 99]
@@ -205,13 +205,13 @@ protected:
 
 class Viewer : public Flight, public Passenger {
 public:
-   bool displayBoardingPass() {
+   bool displayBoardingPass() { //done
       string tempString, nameInput;
       printTitle();
       cout << "Enter name of passenger: ";
       cin >> nameInput;
 
-      #pragma region getPassengerInfo
+      #pragma region getPassengerInfo //done
       bool passengerExists = false;
       ifstream passengers("text-files/passengers.txt");
       while(getline(passengers, this->name, ',')){

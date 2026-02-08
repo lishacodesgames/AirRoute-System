@@ -1,4 +1,4 @@
-#include "core/Passenger.h"
+#pragma once
 #include <string>
 
 struct Passenger {
