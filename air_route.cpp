@@ -6,6 +6,7 @@
 using namespace std;
 
 //!!!!! FIX FILE SYSTEM
+// TODO in generating flights & passengers, check if starting from \n and never leaving extra \n behind
 
 #pragma region FUNCTIONS
 
@@ -111,11 +112,14 @@ public:
       #pragma region fileManagement
       flights.push_back(ID);
       ofstream txtFlights("text-files/flights.txt", ios::app);
-      txtFlights << ID << "\n";
+      txtFlights << "\n" << ID;
       txtFlights.close();
 
       txtFlights.open("text-files/flightsInfo.txt", ios::app);
-      txtFlights << ID << "|" << origin << "," << destination << "|" << emptySeats << "/" << totalSeats << "|" << departureTime << "|" << gate << "|" << terminal << "\n";
+      txtFlights << "\n" << ID << "|" 
+      << origin << "," << destination << "|" 
+      << emptySeats << "/" << totalSeats << "|" 
+      << departureTime << "|" << gate << "|" << terminal;
       txtFlights.close();
       #pragma endregion
    }
@@ -140,7 +144,7 @@ public:
       string tempString;
 
       #pragma region readValues
-      ifstream flightsInfo("flightsInfo.txt");
+      ifstream flightsInfo("text-files/flightsInfo.txt");
 
       for(int i = 0; i < index; i++) {
          getline(flightsInfo, tempString);
@@ -149,15 +153,19 @@ public:
       getline(flightsInfo, ID, '|');
       getline(flightsInfo, origin, ',');
       getline(flightsInfo, destination, '|');
+
       getline(flightsInfo, tempString, '/');
       emptySeats = stoi(tempString);
       getline(flightsInfo, tempString, '|');
       totalSeats = stoi(tempString);
+
       getline(flightsInfo, departureTime, '|');
+
       getline(flightsInfo, tempString, '|');
       gate = tempString[0];
       getline(flightsInfo, tempString, '|');
       terminal = stoi(tempString);
+
       flightsInfo.close();
       #pragma endregion
 
@@ -427,6 +435,7 @@ public:
    }
 };
 
+#pragma region MAIN
 int main() {
    srand(time(0));
    Viewer program;
@@ -463,6 +472,7 @@ int main() {
                printTitle();
                cout << "Enter flight ID: ";
                cin >> temp;
+               cin.ignore();
                
                printTitle();
                success = program.getFlightInfo(temp, true);
