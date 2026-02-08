@@ -250,13 +250,11 @@ public:
    }
 };
 
-// TODO organise all .txt's into a text files folder
 // TODO replace cin with getline() wherever getting cities. For Rio de Janeiro
 // TODO add feedback when displayOptions() returns with ""
 // TODO move not-needed functions to private/protected
-// TODO EVERYWHERE ada do-while for (y/n) validation
+// TODO EVERYWHERE add do-while for (y/n) validation
 // TODO what to do if no flights?
-/// @bug when ID == s, it is valid fsr TODO add bug to notion
 
 class Booker : public Flight, public Passenger {
 private:
