@@ -2,14 +2,15 @@
 :: Full-line comment = preceeded by '::'
 :: In-line comment = preceeded by '& REM'
 
-:: STILL NOT WORKING BCZ OF THE * !!!!
-
 @echo off & REM To stop the echo of each command
 
 cls
 echo Building Air Route System ...
 :: add sleep for 300ms and 1 more echo
-::   ../src/core/*.cpp ^ //since not needed yet
+timeout /t 1 >nul
+echo Compiling source files ...
+
+::   ../src/core/*.cpp ^ //not needed yet, as core is empty for now
 
 g++ -std=c++17 ^
    ../src/main.cpp ^
