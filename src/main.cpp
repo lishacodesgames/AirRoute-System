@@ -1,6 +1,7 @@
 #include "ui/Menu.h"
 #include "ui/FlightView.h"
 #include "ui/PassengerView.h"
+#include "services/BookingService.h"
 #include "storage/FlightStorage.h"
 #include "storage/PassengerStorage.h"
 #include "core/Flight.h"
@@ -24,7 +25,8 @@ int main() {
             return 0;
 
          case Choice::Book: {
-            std::cout << "Booking..."; //TODO
+            BookingService booker;
+            booker.bookFlight();
             std::cin.get();
             break;
          }

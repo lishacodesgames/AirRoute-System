@@ -1,4 +1,5 @@
 #include "ui/Menu.h"
+#include "utils/ParseUtils.h"
 #include <iostream>
 #include <string>
 
@@ -31,16 +32,10 @@ int MainMenu() {
       getline(std::cin, input);
 
       // error1: input not a number
-      try {
-         choice = std::stoi(input);
-      } catch(std::invalid_argument& e) {
+      choice = parseInt(input);
+      if (choice == -100 || choice == 100) {
          printTitle();
-         std::cout << "\nPlease enter a number.\n";
-         invalidChoice = true;
-         continue;
-      } catch(std::out_of_range& e) {
-         printTitle();
-         std::cout << "\nWhy would you do that? \n";
+         std::cout << (choice == -100 ? "\nPlease enter a number.\n" : "\nWhy would you do that?\n");
          invalidChoice = true;
          continue;
       }
@@ -65,13 +60,12 @@ std::string getIDforShow() {
    return id;
 }
 
+/// @attention starts with \\n
 bool promptTryAgain() {
    std::string ans;
    std::cout << "\nInvalid input.";
    std::cout << "\nTry again? (y/n) ";
    getline(std::cin, ans);
-   if (ans == "") //getline read an input buffer leftover from std::cin.. idk where TODO FIX
-      getline(std::cin, ans);
 
    for(char& ch : ans) {
       ch = std::toupper(static_cast<unsigned char>(ch)); // to avoid undefined behaviour with non-ASCII characters
@@ -81,7 +75,24 @@ bool promptTryAgain() {
       return true;
    else if (ans == "N" || ans == "NO")
       return false;
-   else {
+   else
       return promptTryAgain();
+}
+
+/// @param prompt (must end with \\n) What the user will be shown before asking (y\n)?
+bool promptTryAgain(std::string prompt) {
+   std::string ans;
+   std::cout << prompt << "Try again? (y/n) ";
+   getline(std::cin, ans);
+
+   for(char& ch : ans) {
+      ch = std::toupper(static_cast<unsigned char>(ch)); // to avoid undefined behaviour with non-ASCII characters
    }
+
+   if (ans == "Y" || ans == "YES") 
+      return true;
+   else if (ans == "N" || ans == "NO")
+      return false;
+   else
+      return promptTryAgain(prompt);
 }

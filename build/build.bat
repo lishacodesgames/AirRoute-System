@@ -10,7 +10,8 @@ echo Building Air Route System ...
 timeout /t 1 >nul
 echo Compiling source files ...
 
-::   ../src/core/*.cpp ^ //not needed yet, as core is empty for now
+::   ../src/core/*.cpp ^ //not needed yet, as it's empty for now
+::   ../src/frontend/*.cpp ^ //not needed yet, as raylib not implemented yet
 
 g++ -std=c++17 ^
    ../src/main.cpp ^
