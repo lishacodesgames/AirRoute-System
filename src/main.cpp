@@ -14,11 +14,9 @@ int main() {
    std::srand(time(0));
    //declarations TODO
    Choice choice;
-   int rawChoice;
 
    while(true) {
-      rawChoice = MainMenu();
-      choice = static_cast<Choice>(rawChoice);
+      choice = static_cast<Choice>(MainMenu());
 
       switch(choice) {
          case Choice::Exit: 
