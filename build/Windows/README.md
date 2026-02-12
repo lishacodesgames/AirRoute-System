@@ -10,18 +10,3 @@ Can run only from repo or from build or Windows directory
 </ol>
 
 **Both work just fine. Depends on your patience / trust in your compiler**
-
-#### Skip the Batch file and directly run:
-`g++ -std=c++17 ..\..\src\services\*.cpp ..\..\src\storage\*.cpp ..\..\src\ui\*.cpp ..\..\src\utils\*.cpp ..\..\src\main.cpp -I..\..\include -o AirRouteSystem.exe`
-<br>
-(From build/Windows directory)
-<br> OR <br>
-
-`g++ -std=c++17 ..\src\services\*.cpp ..\src\storage\*.cpp ..\src\ui\*.cpp ..\src\utils\*.cpp ..\src\main.cpp -I..\include -o Windows\AirRouteSystem.exe`
-<br>
-(From build directory)
-<br> OR <br>
-
-`g++ -std=c++17 src\services\*.cpp src\storage\*.cpp src\ui\*.cpp src\utils\*.cpp src\main.cpp -Iinclude -o build\Windows\AirRouteSystem.exe`
-<br>
-(From repo root directory)

@@ -1,43 +1,60 @@
 :: WINDOWS BATCH FILE
-:: Full-line comment = preceeded by '::'
-:: In-line comment = preceeded by '& REM'
+:: TESTED base ✔
+:: TESTED raylib X (not implemented yet, so no build errors, but also no graphics)
 
-:: echo. = blank line 
+:: !! NOTE: NO FOLDER IN BASE PATH SHOULD HAVE SPACE IN THEM, IT WILL BREAK THE BUILD 
 
-:: To stop the echo of each command
+:: To stop the echo of each command (VERY IMPORTANT)
 @echo off
 setlocal EnableDelayedExpansion
 
 cls
 echo Building Air Route System
 
-::   ../src/core/*.cpp ^ //not needed yet, as it's empty for now
-::   ../src/frontend/*.cpp ^ //not needed yet, as raylib not implemented yet
 
-:: Detect location
-if exist src\main.cpp (
-   echo Compiling from repo root directory.
-   set "BASE=."
-   set "OUT=build\Windows\AirRouteSystem.exe"
-) else if exist ..\src\main.cpp (
-   echo Compiling from build directory.
-   set "BASE=.."
-   set "OUT=Windows\AirRouteSystem.exe"
-) else if exist ..\..\src\main.cpp (
-   echo Compiling from build\Windows directory.
-   set "BASE=.."
-   set "OUT=AirRouteSystem.exe"
-) else (
+:: -----------------
+:: DETECT LOCATIONS
+:: -----------------
+
+:: get script directory
+set "SCRIPT_DIR=%~dp0"
+:: remove trailing backlash cuz we are appending \ anyways
+set "SCRIPT_DIR=%SCRIPT_DIR:~0,-1%"
+:: now we are in Windows\ so we go up ..\.. to root repo
+set "BASE=%SCRIPT_DIR%\..\.."
+
+:: Normalise path (it is relative rn, which is dangerous)
+for %%i in ("%BASE%") do set "BASE=%%~fi"
+
+if not exist "%BASE%\src\main.cpp" (
    echo Error: main.cpp not found in src directory.
-   pause
    exit /b 1
 )
-:: Detect if appended "quick" aka skip the semantics and just compile it in one go
+
+:: Set output executable name & location
+set "OUT=%BASE%\build\Windows\AirRouteSystem.exe"
+if exist "%OUT%" (
+   rm %OUT%
+)
+
+echo Project Directory: "%BASE%"
+echo Output File: "%OUT%"
+
+:: -----------
+:: QUICK MODE
+:: -----------
 set "MODE=%1"
 if "%MODE%"=="quick" (
    echo.
    echo QUICK MODE ENABLED: skipping detailed compilation steps.
-   g++ -std=c++17 %BASE%\src\services\*.cpp %BASE%\src\storage\*.cpp %BASE%\src\ui\*.cpp %BASE%\src\utils\*.cpp %BASE%\src\main.cpp -I%BASE%\include -o %OUT%
+   g++ -std=c++17 ^
+      %BASE%\src\services\*.cpp ^
+      %BASE%\src\storage\*.cpp ^
+      %BASE%\src\ui\*.cpp ^
+      %BASE%\src\utils\*.cpp ^
+      %BASE%\src\main.cpp ^
+      -I%BASE%\include -o %OUT%
+
    if %ERRORLEVEL% equ 0 (
       cls
       echo Build successful in quick mode!
@@ -45,63 +62,75 @@ if "%MODE%"=="quick" (
       echo.
       echo Build failed in quick mode with error code %ERRORLEVEL%.
    )
-   pause
    exit /b 0
 )
 
-timeout /t 1 >nul
+:: ../src/core/*.cpp   not needed yet, as it's empty for now
+:: ../src/frontend/*.cpp   not needed yet, as raylib not implemented yet
 
-:: Compile
+:: ----------
+:: COMPILING
+:: ----------
+
+:: make obj folder
+set "OBJ_DIR=%BASE%\build\Windows\obj"
+if exist "%OBJ_DIR%" (
+   rmdir /s /q "%OBJ_DIR%"
+   if exist "%OBJ_DIR%" (
+      echo ! failed to remove existed build\Windows\obj\ directory !
+   )   
+)
+mkdir "%OBJ_DIR%"
+
+:: temporarily make current directory = obj to contain *.o
+pushd "%OBJ_DIR%"
 
 :: services
 echo.
-echo Compiling SERVICES
+echo ----------SERVICES----------
 for %%f in (%BASE%\src\services\*.cpp) do (
-   echo Compiling %%~nxf ...
+   :: print only filename without path
+   echo Compiling %%~nxf...
 )
 g++ -std=c++17 -c %BASE%\src\services\*.cpp -I%BASE%\include
 if %ERRORLEVEL% neq 0 (
    echo Compilation failed for services with error code %ERRORLEVEL%.
-   pause
    exit /b 1
 )
 
 :: storage
 echo.
-echo Compiling STORAGE
+echo ----------STORAGE----------
 for %%f in (%BASE%\src\storage\*.cpp) do (
-   echo Compiling %%~nxf ...
+   echo Compiling %%~nxf...
 )
 g++ -std=c++17 -c %BASE%\src\storage\*.cpp -I%BASE%\include
 if %ERRORLEVEL% neq 0 (
    echo Compilation failed for storage with error code %ERRORLEVEL%.
-   pause
    exit /b 1
 )
 
 :: ui
 echo.
-echo Compiling UI
+echo ----------UI----------
 for %%f in (%BASE%\src\ui\*.cpp) do (
-   echo Compiling %%~nxf ...
+   echo Compiling %%~nxf...
 )
 g++ -std=c++17 -c %BASE%\src\ui\*.cpp -I%BASE%\include
 if %ERRORLEVEL% neq 0 (
    echo Compilation failed for ui with error code %ERRORLEVEL%.
-   pause
    exit /b 1
 )
 
 :: utils
 echo.
-echo Compiling UTILS
+echo ----------UTILS----------
 for %%f in (%BASE%\src\utils\*.cpp) do (
-   echo Compiling %%~nxf ...
+   echo Compiling %%~nxf...
 )
 g++ -std=c++17 -c %BASE%\src\utils\*.cpp -I%BASE%\include
 if %ERRORLEVEL% neq 0 (
    echo Compilation failed for utils with error code %ERRORLEVEL%.
-   pause
    exit /b 1
 )
 
@@ -111,24 +140,32 @@ echo Compiling MAIN
 g++ -std=c++17 -c %BASE%\src\main.cpp -I%BASE%\include
 if %ERRORLEVEL% neq 0 (
    echo Compilation failed for main.cpp with error code %ERRORLEVEL%.
-   pause
    exit /b 1
 )
 
+:: -------------------------------
 :: Creating .exe and deleting *.o
+:: -------------------------------
 echo.
-echo Linking object files ...
-g++ *.o -o %OUT%
+echo Linking object files...
+g++ *.o -o "%OUT%"
+
+:: go back to working directory
+popd
 
 if %ERRORLEVEL% equ 0 (
-   :: Redirect stdout >nul and stderr 2>nul to suppress unwanted echos
-   del *.o >nul 2>nul
-   cls
-   echo Build successful!
+   rmdir /s /q "%OBJ_DIR%"
+   echo.
+   echo Build successful!!
+   echo.
+   echo Tap any key to run program . . .
+   pause >nul
+
+   :: 2 args to run program: .exe, root path for storage access
+   "%OUT%" "%BASE%"
 ) else (
    echo.
    echo Build failed with error code %ERRORLEVEL%.
 )
 
 pause
-cls

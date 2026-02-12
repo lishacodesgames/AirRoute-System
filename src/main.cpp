@@ -10,7 +10,13 @@
 
 enum class Choice {Exit, Book, ViewFlight, ViewBoardingPass, ViewAllFlights};
 
-int main() {
+int main(int argc, char* argv[]) {
+   if(argc < 2) {
+      std::cout << "\nBase path not provided!\n";
+      return 1;
+   }
+   std::string BASE_PATH = argv[1];
+
    std::srand(time(0));
    //declarations TODO
    Choice choice;
@@ -30,7 +36,7 @@ int main() {
          }
 
          case Choice::ViewFlight: {
-            FlightStorage storage;
+            FlightStorage storage(BASE_PATH);
             Flight f;
             bool success, shouldContinue = true;
             std::string id;

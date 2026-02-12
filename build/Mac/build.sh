@@ -1,8 +1,7 @@
 #!/bin/bash
 
 clear
-echo "Building Air Route System"
-echo 
+echo "Building Air Route System"]
 
 # Detect location
 if [ -f "src/main.cpp" ]; then # root directory
