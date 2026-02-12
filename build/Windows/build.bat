@@ -8,8 +8,6 @@
 @echo off
 setlocal EnableDelayedExpansion
 
-cls
-echo Building Air Route System
 
 
 :: -----------------
@@ -20,7 +18,7 @@ echo Building Air Route System
 set "SCRIPT_DIR=%~dp0"
 :: remove trailing backlash cuz we are appending \ anyways
 set "SCRIPT_DIR=%SCRIPT_DIR:~0,-1%"
-:: now we are in Windows\ so we go up ..\.. to root repo
+:: currently in Windows\, go up ..\.. to root repo
 set "BASE=%SCRIPT_DIR%\..\.."
 
 :: Normalise path (it is relative rn, which is dangerous)
@@ -37,6 +35,8 @@ if exist "%OUT%" (
    rm %OUT%
 )
 
+cls
+echo Building Air Route System
 echo Project Directory: "%BASE%"
 echo Output File: "%OUT%"
 
@@ -58,11 +58,12 @@ if "%MODE%"=="quick" (
    if %ERRORLEVEL% equ 0 (
       cls
       echo Build successful in quick mode!
+      exit /b 0
    ) else (
       echo.
       echo Build failed in quick mode with error code %ERRORLEVEL%.
+      exit /b 1
    )
-   exit /b 0
 )
 
 :: ../src/core/*.cpp   not needed yet, as it's empty for now
@@ -77,7 +78,7 @@ set "OBJ_DIR=%BASE%\build\Windows\obj"
 if exist "%OBJ_DIR%" (
    rmdir /s /q "%OBJ_DIR%"
    if exist "%OBJ_DIR%" (
-      echo ! failed to remove existed build\Windows\obj\ directory !
+      echo failed to remove existed build\Windows\obj\ directory!
    )   
 )
 mkdir "%OBJ_DIR%"
@@ -85,7 +86,6 @@ mkdir "%OBJ_DIR%"
 :: temporarily make current directory = obj to contain *.o
 pushd "%OBJ_DIR%"
 
-:: services
 echo.
 echo ----------SERVICES----------
 for %%f in (%BASE%\src\services\*.cpp) do (
@@ -95,10 +95,10 @@ for %%f in (%BASE%\src\services\*.cpp) do (
 g++ -std=c++17 -c %BASE%\src\services\*.cpp -I%BASE%\include
 if %ERRORLEVEL% neq 0 (
    echo Compilation failed for services with error code %ERRORLEVEL%.
+   popd
    exit /b 1
 )
 
-:: storage
 echo.
 echo ----------STORAGE----------
 for %%f in (%BASE%\src\storage\*.cpp) do (
@@ -107,10 +107,10 @@ for %%f in (%BASE%\src\storage\*.cpp) do (
 g++ -std=c++17 -c %BASE%\src\storage\*.cpp -I%BASE%\include
 if %ERRORLEVEL% neq 0 (
    echo Compilation failed for storage with error code %ERRORLEVEL%.
+   popd
    exit /b 1
 )
 
-:: ui
 echo.
 echo ----------UI----------
 for %%f in (%BASE%\src\ui\*.cpp) do (
@@ -119,10 +119,10 @@ for %%f in (%BASE%\src\ui\*.cpp) do (
 g++ -std=c++17 -c %BASE%\src\ui\*.cpp -I%BASE%\include
 if %ERRORLEVEL% neq 0 (
    echo Compilation failed for ui with error code %ERRORLEVEL%.
+   popd
    exit /b 1
 )
 
-:: utils
 echo.
 echo ----------UTILS----------
 for %%f in (%BASE%\src\utils\*.cpp) do (
@@ -131,15 +131,17 @@ for %%f in (%BASE%\src\utils\*.cpp) do (
 g++ -std=c++17 -c %BASE%\src\utils\*.cpp -I%BASE%\include
 if %ERRORLEVEL% neq 0 (
    echo Compilation failed for utils with error code %ERRORLEVEL%.
+   popd
    exit /b 1
 )
 
-:: MAIN.CPP
+:: MAIN
 cls
 echo Compiling MAIN
 g++ -std=c++17 -c %BASE%\src\main.cpp -I%BASE%\include
 if %ERRORLEVEL% neq 0 (
    echo Compilation failed for main.cpp with error code %ERRORLEVEL%.
+   popd
    exit /b 1
 )
 
@@ -152,9 +154,9 @@ g++ *.o -o "%OUT%"
 
 :: go back to working directory
 popd
+rmdir /s /q "%OBJ_DIR%"
 
 if %ERRORLEVEL% equ 0 (
-   rmdir /s /q "%OBJ_DIR%"
    echo.
    echo Build successful!!
    echo.

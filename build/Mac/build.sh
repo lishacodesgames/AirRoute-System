@@ -1,127 +1,159 @@
 #!/bin/bash
+# TESTED base X
+# TESTED raylib X (not implemented yet, so no build errors, but also no graphics)
 
-clear
-echo "Building Air Route System"]
+# ----------------
+# DETECT LOCATION
+# ----------------
 
-# Detect location
-if [ -f "src/main.cpp" ]; then # root directory
-   echo "Compiling from repo root directory."
-   BASE="."
-   OUT="build/Mac/AirRouteSystem"
-elif [ -f "../src/main.cpp" ]; then
-   echo "Compiling from build directory."
-   BASE=".."
-   OUT="Mac/AirRouteSystem"
-elif [ -f "../../src/main.cpp" ]; then
-   echo "Compiling from build/Mac directory."
-   BASE="../.."
-   OUT="AirRouteSystem"
-else
+# get script directory
+SCRIPT_DIR="$( cd "$( dirname "${BASE_SOURCE[0]}" )" && pwd )"
+# currently in Windows\, go up ..\.. to root repo
+BASE="$( realpath "$SCRIPT_DIR/../.." )"
+
+if [ ! -f "$BASE/src/main.cpp" ]; then
    echo "Error: main.cpp not found in src directory."
-   read -n 1 -s -r -p "Press any key to continue..."
    exit 1
 fi
 
-# Detect if appended "quick" aka skip the semantics and just compile it in one go
+# Set output executable name & location
+OUT="$BASE/build/Mac/AirRouteSystem"
+if [ if "$OUT" ]; then
+   rm "$OUT"
+fi
+
+clear
+echo "Building Air Route System"
+echo "Project Directory: $BASE"
+echo "Output File: $OUT"
+
+# -----------
+# QUICK MODE
+# -----------
+
 MODE="$1"
 if [ "$MODE" == "quick" ]; then
    echo
    echo QUICK MODE ENABLED: skipping detailed compilation steps.
    # services storage ui and utils
    g++ -std=c++17 \
-      "$BASE/src/main.cpp" \
       "$BASE/src/services/"*.cpp \
       "$BASE/src/storage/"*.cpp \
       "$BASE/src/ui/"*.cpp \
       "$BASE/src/utils/"*.cpp \
+      "$BASE/src/main.cpp" \
       -I"$BASE/include" \
       -o "$OUT"
    
    if [ $? -eq 0 ]; then
       clear
       echo "Build successful in quick mode!"
+      exit 0
    else
       echo
       echo "Build failed in quick mode with error code $?"
+      exit 1
    fi
-   read -n 1 -s -r -p "Press any key to continue..."
-   exit 1
 fi
 
-# Compile
-mkdir -p "$BASE/build/Mac/obj"
+# ../src/core/*.cpp   not needed yet, as it's empty for now
+# ../src/frontend/*.cpp   not needed yet, as raylib not implemented yet
 
-#services
+# ----------
+# COMPILING
+# ----------
+
+# make obj folder
+OBJ_DIR="$BASE/build/Mac/obj"
+if [ -d "$OBJ_DIR"]; then
+   rm -rf "$OBJ_DIR"
+   if [ -d "$OBJ_DIR" ]; then
+      echo "failed to remove existed build\Windows\obj\ directory!"
+   fi
+fi
+mkdir -p "$OBJ_DIR"
+
+# temporarily make current directory = obj to contain *.o
+pushd "$OBJ_DIR" > /dev/null
+
 echo
-echo "Compiling SERVICES"
-for f in "$BASE/src/services/"*.cpp; do
+echo "----------SERVICES----------"
+for f in "$BASE/src/services"*.cpp; do
    echo "Compiling $(basename "$f")..."
 done
-g++ -std=c++17 -c "$BASE/src/services/"*.cpp -I"$BASE/include" -o "$BASE/build/Mac/obj/services.o"
+g++ -std=c++17 -c "$BASE/src/services/"*.cpp -I"$BASE/include"
 if [ $? -ne 0 ]; then
-   echo "Compilation failed for services with error code $?"
-   read -n 1 -s -r -p "Press any key to continue..."
+   echo "Compilation failed for services with error code $?."
+   popd > /dev/null
    exit 1
 fi
 
-#storage
 echo
-echo "Compiling STORAGE"
-for f in "$BASE/src/storage/"*.cpp; do
+echo "-----------STORAGE----------"
+for f in "$BASE/src/storage"*.cpp; do
    echo "Compiling $(basename "$f")..."
 done
-g++ -std=c++17 -c "$BASE/src/storage/"*.cpp -I"$BASE/include" -o "$BASE/build/Mac/obj/storage.o"
+g++ -std=c++17 -c "$BASE/src/storage/"*.cpp -I"$BASE/include"
 if [ $? -ne 0 ]; then
-   echo "Compilation failed for storage with error code $?"
-   read -n 1 -s -r -p "Press any key to continue..."
+   echo "Compilation failed for storage with error code $?."
+   popd > /dev/null
    exit 1
 fi
 
-#ui
 echo
-echo "Compiling UI"
-for f in "$BASE/src/ui/"*.cpp; do
+echo "-------------UI-------------"
+for f in "$BASE/src/ui"*.cpp; do
    echo "Compiling $(basename "$f")..."
 done
-g++ -std=c++17 -c "$BASE/src/ui/"*.cpp -I"$BASE/include" -o "$BASE/build/Mac/obj/ui.o"
+g++ -std=c++17 -c "$BASE/src/ui/"*.cpp -I"$BASE/include"
 if [ $? -ne 0 ]; then
-   echo "Compilation failed for ui with error code $?"
-   read -n 1 -s -r -p "Press any key to continue..."
+   echo "Compilation failed for ui with error code $?."
+   popd > /dev/null
    exit 1
 fi
 
-#utils
 echo
-echo "Compiling UTILS"
-for f in "$BASE/src/utils/"*.cpp; do
+echo "-----------UTILS------------"
+for f in "$BASE/src/utils"*.cpp; do
    echo "Compiling $(basename "$f")..."
 done
-g++ -std=c++17 -c "$BASE/src/utils/"*.cpp -I"$BASE/include" -o "$BASE/build/Mac/obj/utils.o"
+g++ -std=c++17 -c "$BASE/src/utils/"*.cpp -I"$BASE/include"
 if [ $? -ne 0 ]; then
-   echo "Compilation failed for utils with error code $?"
-   read -n 1 -s -r -p "Press any key to continue..."
+   echo "Compilation failed for utils with error code $?."
+   popd > /dev/null
    exit 1
 fi
 
-#MAIN
+# MAIN
 clear
 echo "Compiling MAIN"
-g++ -std=c++17 -c "$BASE/src/main.cpp" -I"$BASE/include" -o "$BASE/build/Mac/obj/main.o"
+g++ -std=c++17 -c "$BASE/src/main.cpp" -I"$BASE/include"
 if [ $? -ne 0 ]; then
    echo "Compilation failed for main.cpp with error code $?"
-   read -n 1 -s -r -p "Press any key to continue..."
+   popd > /dev/null
    exit 1
 fi
 
-# Link
+# ---------------------------------
+# Creating binary and deleting *.o
+# ---------------------------------
 echo
-echo "Linking objects into executable..."
-g++ -std=c++17 "$BASE/build/Mac/obj/"*.o -o "$OUT"
+echo "Linking objects files..."
+g++ *.o -o "$OUT"
+
+popd > /dev/null
+rm -rf "$OBJ_DIR"
 
 if [ $? -eq 0 ]; then
-   rm -f "$BASE/build/Mac/obj/"*.o
-   clear
-   echo "Build successful!"
+   echo
+   echo "Build successful!!"
+   echo
+   read -n 1 -s -r -p "Tap any key to run program . . ."
+
+    # 2 args to run program: .exe, root path for storage access
+   "$OUT" "$BASE"
+
+   read
 else
    echo
    echo "Build failed with error code $?"
