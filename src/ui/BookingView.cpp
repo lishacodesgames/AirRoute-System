@@ -14,21 +14,12 @@
 std::string getCity(std::string type) {
    std::string city;
    int index;
-   FlightStorage storage;
+   BookingService booker;
    bool repeat = false;
 
    printTitle();
    std::cout << "Enter your " + type + " city: ";
    getline(std::cin, city);
-
-   index = getIndex(city, storage.getCities());
-
-   if(index == -1) {
-      repeat = promptTryAgain(city + " does not exist.\n");
-      return repeat ? getCity(type) : "";
-   }
-   else 
-      return city;
 }
 
 int BookingMenu() {
@@ -139,14 +130,13 @@ int OneFlightMenu(std::string prompt, std::string flightID) {
    return choice;
 }
 
-std::string displayBookingOptions() {
+std::string displayBookingOptions(FlightStorage& storage) {
    BookingChoice choice = static_cast<BookingChoice>(BookingMenu());
 
    switch (choice) {
       case BookingChoice::GoBack:
          return "";
       case BookingChoice::byID: {
-         FlightStorage storage;
          return getID(storage.getFlightIDs());
       }
       case BookingChoice::byOrigin: {
@@ -154,7 +144,7 @@ std::string displayBookingOptions() {
          if (depCity == "") // user decided to quit
             return "";
          
-         BookingService booker;
+         BookingService booker(storage);
          std::vector<std::string> originFlights = booker.getValidFlights(depCity);
 
          switch(originFlights.size()) {
@@ -170,10 +160,9 @@ std::string displayBookingOptions() {
                while (true) {
                   switch (menuChoice) {
                      case 0:
-                        return displayBookingOptions();
+                        return displayBookingOptions(storage);
                      
                      case 1: {
-                        FlightStorage storage;
                         Flight f;
                         std::string input;
 
@@ -188,7 +177,7 @@ std::string displayBookingOptions() {
                            if (input == "y")
                               return originFlights[0];
                            else if (input == "n")
-                              return displayBookingOptions();
+                              return displayBookingOptions(storage);
                            else {
                               std::cout << "Invalid input.\n";
                            }
@@ -212,10 +201,9 @@ std::string displayBookingOptions() {
 
          switch (choice) {
             case BookingChoice::GoBack: 
-               return displayBookingOptions(); // loop back
+               return displayBookingOptions(storage); // loop back
 
             case BookingChoice::byID: {
-               FlightStorage storage;
                Flight f;
 
                printTitle();

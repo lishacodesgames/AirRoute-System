@@ -33,7 +33,7 @@ int main(int argc, char* argv[]) {
             return 0;
 
          case Choice::Book: {
-            BookingService booker;
+            BookingService booker(storage);
             booker.bookFlight();
             std::cin.get();
             break;
