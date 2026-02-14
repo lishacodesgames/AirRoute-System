@@ -1,2 +1,2 @@
 # excluding C files from being included in language stats
-include/*.h linguist-vendored
+include/**/*.h linguist-vendored
