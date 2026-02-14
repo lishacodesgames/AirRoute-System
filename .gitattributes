@@ -1,2 +1,5 @@
-# excluding C files from being included in language stats
+# C-based headers
 include/**/*.h linguist-vendored
+
+# generated storage files
+text-files/*.txt
