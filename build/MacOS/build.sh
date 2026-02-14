@@ -8,8 +8,9 @@
 
 # get script directory
 SCRIPT_DIR="$( cd "$( dirname "${BASE_SOURCE[0]}" )" && pwd )"
-# currently in Windows\, go up ..\.. to root repo
+# currently in MacOS\, go up ..\.. to root repo
 BASE="$( realpath "$SCRIPT_DIR/../.." )"
+echo "Base: $BASE"
 
 if [ ! -f "$BASE/src/main.cpp" ]; then
    echo "Error: main.cpp not found in src directory."
@@ -18,7 +19,7 @@ fi
 
 # Set output executable name & location
 OUT="$BASE/build/Mac/AirRouteSystem"
-if [ if "$OUT" ]; then
+if [ -f "$OUT" ]; then
    rm "$OUT"
 fi
 
@@ -46,9 +47,13 @@ if [ "$MODE" == "quick" ]; then
       -o "$OUT"
    
    if [ $? -eq 0 ]; then
-      clear
-      echo "Build successful in quick mode!"
-      exit 0
+      echo
+      echo "Build successful!!"
+      echo
+      read -n 1 -s -r -p "Tap any key to run program . . ."
+      
+      # 2 args to run program: .exe, root path for storage access
+      "$OUT" "$BASE"
    else
       echo
       echo "Build failed in quick mode with error code $?"

@@ -1,15 +1,17 @@
 #include "storage/PassengerStorage.h"
 #include <fstream>
 
+
+PassengerStorage::PassengerStorage(){}
 PassengerStorage::PassengerStorage(const std::filesystem::path& BASE) {
-   textFiles = BASE / "text-files";
+   passengers = BASE / "text-files" / "passengers.txt";
 }
 
 bool PassengerStorage::getPassengerInfo(std::string name, Passenger& outputP) {
    std::string temp;
    bool passengerExists = false;
    
-   std::ifstream passengers(textFiles / "passengers.txt");
+   std::ifstream passengers(this->passengers);
    while(getline(passengers, outputP.name, ',')) {
       if(outputP.name != name) {
          getline(passengers, temp);

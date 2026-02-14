@@ -1,7 +1,5 @@
 # How to Build on Windows
 Run the build.bat file
-<br>
-Can run only from repo or from build or Windows directory
 
 #### 2 ways to run batch file:
 <ol>

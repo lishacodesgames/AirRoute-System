@@ -1,11 +1,12 @@
 #pragma once
+#include "core/Flight.h"
 #include <vector>
 #include <string>
 #include <filesystem>
 
 class FlightStorage {
    std::filesystem::path textFiles;
-public:
+   public:
    FlightStorage(){} // default constructor 
    FlightStorage(const std::filesystem::path& BASE);
    

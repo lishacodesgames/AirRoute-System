@@ -4,8 +4,8 @@
 #include <vector>
 
 class BookingService {
-   public:
-   static FlightStorage storage;
+   FlightStorage storage;
+public:
    
    BookingService(); //empty
    BookingService(FlightStorage& storage);

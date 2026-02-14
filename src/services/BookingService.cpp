@@ -11,7 +11,7 @@ BookingService::BookingService(FlightStorage& storage) {
 /// @todo TODO REMOVE!
 #include <iostream>
 void BookingService::bookFlight() {
-   std::string ID = displayBookingOptions(storage);
+   std::string ID = displayBookingOptions(booker);
    if (ID == "" || ID == "0")
       std::cout << "FLIGHT WAS NOT BOOKED.";
    else 

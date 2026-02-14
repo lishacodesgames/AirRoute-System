@@ -73,7 +73,6 @@ int OriginChoiceMenu() {
    return choice.second;
 }
 
-///@param prompt "departing from origin" OR "going from origin -> destination"
 int OneFlightMenu(std::string prompt, std::string flightID) {
    std::string input;
    std::pair <bool, int> choice;
@@ -99,11 +98,15 @@ std::string displayBookingOptions(BookingService& booker) {
    BookingChoice choice = static_cast<BookingChoice>(BookingMenu());
 
    switch (choice) {
+      case BookingChoice::byDestination:
+         break; // to get rid of warning
+
       case BookingChoice::GoBack:
          return "";
-      case BookingChoice::byID: {
+
+      case BookingChoice::byID:
          return getID(booker.storage.getFlightIDs());
-      }
+
       case BookingChoice::byOrigin: {
          std::string depCity = getCity("origin").value_or(""); // departure city
          if (depCity == "") // user decided to quit
@@ -164,6 +167,7 @@ std::string displayBookingOptions(BookingService& booker) {
          choice = static_cast<BookingChoice>(OriginChoiceMenu());
 
          switch (choice) {
+
             case BookingChoice::GoBack: 
                return displayBookingOptions(booker); // loop back
 
@@ -237,6 +241,9 @@ std::string displayBookingOptions(BookingService& booker) {
                printTitle();
                return getID(destinationFlights);
             }
+         
+            case BookingChoice::byOrigin: 
+               break; // to get rid of warning 
          }
 
          break;
@@ -246,11 +253,6 @@ std::string displayBookingOptions(BookingService& booker) {
    return "";
 }
 
-/**
- * @brief 1. if ID valid, return it
- * @brief 2. if ID exists but not in validFlights, prompt user "book anyways?"
- * @brief 3. if ID doesn't exist, recursive call to re-prompt ID 
- */
 std::string getID(std::vector<std::string> validFlights) {
    BookingService booker;
 
