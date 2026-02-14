@@ -40,7 +40,6 @@ int main(int argc, char* argv[]) {
          }
 
          case Choice::ViewFlight: {
-            FlightStorage storage(BASE_PATH);
             Flight f;
             bool success, shouldContinue = true;
             std::string id;

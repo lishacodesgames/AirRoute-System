@@ -3,29 +3,39 @@
 #include "ui/Menu.h"
 #include "core/Flight.h"
 #include "services/BookingService.h"
-#include "storage/FlightStorage.h"
 #include "utils/ParseUtils.h"
 #include "utils/VectorUtils.h"
 #include <iostream>
 
 /// @todo TODO fix storage declarations
 
-/// @param type "origin" OR "destination" gets printed in the prompt
-std::string getCity(std::string type) {
+std::optional<std::string> getCity(std::string type) {
    std::string city;
    int index;
    BookingService booker;
-   bool repeat = false;
+   bool cityValid, tryAgain;
 
-   printTitle();
-   std::cout << "Enter your " + type + " city: ";
-   getline(std::cin, city);
+   while(true) {
+      printTitle();
+      std::cout << "Enter your " + type + " city: ";
+      getline(std::cin, city);
+   
+      cityValid = isValidCity(city, booker);
+
+      if(cityValid)
+         return city;
+      else {
+         tryAgain = promptTryAgain(city + " does not exist.\n");
+         if(!tryAgain)
+            return std::nullopt;
+         else continue;
+      }
+   }
 }
 
 int BookingMenu() {
    std::string input;
-   int choice;
-   bool invalidChoice;
+   std::pair <bool, int> choice;
 
    printTitle();
    do {
@@ -37,31 +47,17 @@ int BookingMenu() {
       std::cout << "Enter your choice: ";
       getline(std::cin, input);
 
-      // error1: input not a number
-      choice = parseInt(input);
-      if (choice == -100 || choice == 100) {
-         printTitle();
-         std::cout << (choice == -100 ? "\nPlease enter a number.\n" : "\nWhy would you do that?\n");
-         invalidChoice = true;
-         continue;
-      }
+      choice = validMenuInput(input, {0, 2});
+   } while (!choice.first);
 
-      //error2: incorrect number
-      invalidChoice = (choice < 0 || choice > 4);
-      if (invalidChoice) {
-         printTitle();
-         std::cout << "\nInvalid choice.\n";
-      }
-   } while (invalidChoice);
-
-   return choice;
+   return choice.second;
 }
 
 int OriginChoiceMenu() {
    std::string input;
-   int choice;
-   bool invalidChoice;
+   std::pair <bool, int> choice;
 
+   printTitle();
    do {
       std::cout << "===============================\n";
       std::cout << "[0] Go back\n";
@@ -71,36 +67,19 @@ int OriginChoiceMenu() {
       std::cout << "Enter your choice: ";
       getline(std::cin, input);
 
-      // error1: input not a number
-      choice = parseInt(input);
-      if (choice == -100 || choice == 100) {
-         printTitle();
-         std::cout << (choice == -100 ? "\nPlease enter a number.\n" : "\nWhy would you do that?\n");
-         invalidChoice = true;
-         continue;
-      }
+      choice = validMenuInput(input, {0, 2});
+   } while (!choice.first);
 
-      //error2: incorrect number
-      invalidChoice = (choice < 0 || choice > 4);
-      if (invalidChoice) {
-         printTitle();
-         std::cout << "\nInvalid choice.\n";
-      }
-   } while (invalidChoice);
-
-   if (choice == 2)
-      return 3; // bcz BookingChoice::byDestination == 3
-   else
-      return choice;
+   return choice.second;
 }
 
 ///@param prompt "departing from origin" OR "going from origin -> destination"
 int OneFlightMenu(std::string prompt, std::string flightID) {
    std::string input;
-   int choice;
-   bool invalidChoice = true;
+   std::pair <bool, int> choice;
+
    printTitle();
-   do {   
+   do {
       std::cout << "There is 1 flight " + prompt << "\n";
       std::cout << "===============================\n";
       std::cout << "[0] Go back\n";
@@ -110,41 +89,26 @@ int OneFlightMenu(std::string prompt, std::string flightID) {
       std::cout << "Enter your choice: ";
       getline(std::cin, input);
 
-      // error1: input not a number
-      choice = parseInt(input);
-      if (choice == -100 || choice == 100) {
-         printTitle();
-         std::cout << (choice == -100 ? "\nPlease enter a number.\n" : "\nWhy would you do that?\n");
-         invalidChoice = true;
-         continue;
-      }
+      choice = validMenuInput(input, {0, 2});
+   } while (!choice.first);
 
-      //error2: incorrect number
-      invalidChoice = (choice < 0 || choice > 4);
-      if (invalidChoice) {
-         printTitle();
-         std::cout << "\nInvalid choice.\n";
-      }
-   } while (invalidChoice);
-
-   return choice;
+   return choice.second;
 }
 
-std::string displayBookingOptions(FlightStorage& storage) {
+std::string displayBookingOptions(BookingService& booker) {
    BookingChoice choice = static_cast<BookingChoice>(BookingMenu());
 
    switch (choice) {
       case BookingChoice::GoBack:
          return "";
       case BookingChoice::byID: {
-         return getID(storage.getFlightIDs());
+         return getID(booker.storage.getFlightIDs());
       }
       case BookingChoice::byOrigin: {
-         std::string depCity = getCity("origin"); // departure city
+         std::string depCity = getCity("origin").value_or(""); // departure city
          if (depCity == "") // user decided to quit
             return "";
          
-         BookingService booker(storage);
          std::vector<std::string> originFlights = booker.getValidFlights(depCity);
 
          switch(originFlights.size()) {
@@ -160,14 +124,14 @@ std::string displayBookingOptions(FlightStorage& storage) {
                while (true) {
                   switch (menuChoice) {
                      case 0:
-                        return displayBookingOptions(storage);
+                        return displayBookingOptions(booker);
                      
                      case 1: {
                         Flight f;
                         std::string input;
 
                         printTitle();
-                        storage.getFlightInfo(originFlights[0], f);
+                        booker.storage.getFlightInfo(originFlights[0], f);
                         printFlightInfo(f);
                         std::cin.get();
                         while (true) {
@@ -177,7 +141,7 @@ std::string displayBookingOptions(FlightStorage& storage) {
                            if (input == "y")
                               return originFlights[0];
                            else if (input == "n")
-                              return displayBookingOptions(storage);
+                              return displayBookingOptions(booker);
                            else {
                               std::cout << "Invalid input.\n";
                            }
@@ -201,7 +165,7 @@ std::string displayBookingOptions(FlightStorage& storage) {
 
          switch (choice) {
             case BookingChoice::GoBack: 
-               return displayBookingOptions(storage); // loop back
+               return displayBookingOptions(booker); // loop back
 
             case BookingChoice::byID: {
                Flight f;
@@ -210,7 +174,7 @@ std::string displayBookingOptions(FlightStorage& storage) {
                return getID(originFlights);
             }
             case BookingChoice::byDestination: {
-               std::string arrCity = getCity("destination"); // arrival city
+               std::string arrCity = getCity("destination").value_or(""); // arrival city
                if (arrCity == "") // user decided to quit
                   return "";
                
@@ -229,7 +193,7 @@ std::string displayBookingOptions(FlightStorage& storage) {
                      while (true) {
                         switch (menuChoice) {
                            case 0:
-                              return displayBookingOptions();
+                              return displayBookingOptions(booker);
                            
                            case 1: {
                               FlightStorage storage;
@@ -248,7 +212,7 @@ std::string displayBookingOptions(FlightStorage& storage) {
                                     return destinationFlights[0];
                                  }
                                  else if (input == "n") {
-                                    return displayBookingOptions();
+                                    return displayBookingOptions(booker);
                                  }
                                  else {
                                     std::cout << "Invalid input.\n";
@@ -288,10 +252,12 @@ std::string displayBookingOptions(FlightStorage& storage) {
  * @brief 3. if ID doesn't exist, recursive call to re-prompt ID 
  */
 std::string getID(std::vector<std::string> validFlights) {
+   BookingService booker;
+
    if(validFlights.size() == 0) {
       std::cout << "Something went wrong.\n";
       std::cin.get();
-      return displayBookingOptions();
+      return displayBookingOptions(booker);
    }
    
    // print flights
@@ -299,7 +265,7 @@ std::string getID(std::vector<std::string> validFlights) {
    Flight f;
    
    if(validFlights == storage.getFlightIDs()) 
-      displayAllFlights();
+      displayAllFlights(booker.storage);
    else {
       for (std::string id : validFlights) {
          storage.getFlightInfo(id, f);
@@ -329,7 +295,7 @@ std::string getID(std::vector<std::string> validFlights) {
          if (temp == "y")
             return ID;
          else if (temp == "n")
-            return displayBookingOptions();
+            return displayBookingOptions(booker);
          else {
             printTitle();
             std::cout << "Invalid input.\n";
@@ -346,5 +312,5 @@ std::string getID(std::vector<std::string> validFlights) {
       return getID(validFlights);
    }
    else
-      return displayBookingOptions();
+   return displayBookingOptions(booker);
 }

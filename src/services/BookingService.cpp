@@ -3,6 +3,11 @@
 #include "ui/BookingView.h"
 #include "utils/VectorUtils.h"
 
+BookingService::BookingService(){}
+BookingService::BookingService(FlightStorage& storage) {
+   this->storage = storage;
+}
+
 /// @todo TODO REMOVE!
 #include <iostream>
 void BookingService::bookFlight() {

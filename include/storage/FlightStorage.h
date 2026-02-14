@@ -6,7 +6,9 @@
 class FlightStorage {
    std::filesystem::path textFiles;
 public:
+   FlightStorage(){} // default constructor 
    FlightStorage(const std::filesystem::path& BASE);
+   
    std::vector<std::string> getFlightIDs();
    std::vector<std::string> getCities();
    void saveFlight(Flight& flight);

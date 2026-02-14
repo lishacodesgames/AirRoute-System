@@ -4,7 +4,7 @@
 #include <filesystem>
 
 class PassengerStorage {
-   std::filesystem::path textFiles;
+   static FlightStorage& storage;
 public:
    PassengerStorage(const std::filesystem::path& BASE);
    bool getPassengerInfo(std::string name, Passenger& outputP);

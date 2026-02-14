@@ -4,18 +4,19 @@
 #include <vector>
 
 class BookingService {
-   static FlightStorage& storage;
-   friend bool isValidCity(std::string city, BookingService& booker);
-public:
-   BookingService(){}
-   BookingService(FlightStorage& storage) {
-      this->storage = storage;
-   }
+   public:
+   static FlightStorage storage;
+   
+   BookingService(); //empty
+   BookingService(FlightStorage& storage);
+   
    void bookFlight();
-
+   
    /// @return originFlights
    std::vector<std::string> getValidFlights(std::string depCity);
    
    /// @return destinationFlights
    std::vector<std::string> getValidFlights(std::string depCity, std::string arrCity);
 };
+
+bool isValidCity(std::string city, BookingService& booker);
