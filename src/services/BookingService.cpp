@@ -1,7 +1,7 @@
 #include "services/BookingService.h"
-#include "core/Flight.h"
 #include "storage/FlightStorage.h"
 #include "ui/BookingView.h"
+#include "utils/VectorUtils.h"
 #include <string>
 #include <vector>
 
@@ -16,13 +16,12 @@ void BookingService::bookFlight() {
 
 /// @return originFlights
 std::vector<std::string> BookingService::getValidFlights(std::string depCity) {
-   FlightStorage storage;
    Flight f;
    std::vector<std::string> allFlights = storage.getFlightIDs();
 
    std::vector<std::string> originFlights = {};
    for (std::string id : allFlights) {
-      storage.getFlightInfo(id, f);
+      f = storage.getFlightInfo(id).value();
       if (f.origin == depCity)
          originFlights.push_back(id);
    }
@@ -32,17 +31,30 @@ std::vector<std::string> BookingService::getValidFlights(std::string depCity) {
 
 /// @return destinationFlights
 std::vector<std::string> BookingService::getValidFlights(std::string depCity, std::string arrCity) {
-   FlightStorage storage;
    Flight f;
    std::vector<std::string> allFlights = storage.getFlightIDs();
    std::vector<std::string> originFlights = getValidFlights(depCity);
 
    std::vector<std::string> destinationFlights = {};
    for (std::string id : originFlights) {
-      storage.getFlightInfo(id, f);
+      f = storage.getFlightInfo(id).value();
       if (f.destination == arrCity)
          destinationFlights.push_back(id);
    }
 
    return destinationFlights;
+}
+
+std::vector<std::string> BookingService::getAllFlights() {
+   return storage.getFlightIDs();
+}
+
+std::optional<Flight> BookingService::getFlight(std::string ID) {
+   return storage.getFlightInfo(ID);
+}
+
+bool isValidCity(std::string city, BookingService& booker) {
+   int index = getIndex(city, booker.storage.getCities());
+
+   return index == -1 ? false : true;
 }

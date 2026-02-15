@@ -15,10 +15,28 @@ void printTitle() {
    std::cout << "===============================\n";
 }
 
+std::pair<bool, int> validMenuInput(std::string input, std::pair<int, int> range) {
+   std::pair< std::optional<int>, intErrorCode > choice;
+   
+   // X error1: input not a number
+   choice = parseInt(input);
+
+   if(!choice.first) {
+      printTitle();
+
+      if(choice.second == intErrorCode::InvalidArg)
+         std::cout << "\nPlease enter a number.\n";
+      else if(choice.second == intErrorCode::OutOfRange)
+         std::cout << "\nWhy would you do that?\n";
+
+      return {false, -1};
+   }
+}
+
 int MainMenu() {
    std::string input;
-   int choice = -1;
-   bool invalidChoice;
+   std::pair <bool, int> choice;
+   
    printTitle();
    do {
       std::cout << "===============================\n";
@@ -31,24 +49,10 @@ int MainMenu() {
       std::cout << "Enter your choice: ";
       getline(std::cin, input);
 
-      // error1: input not a number
-      choice = parseInt(input);
-      if (choice == -100 || choice == 100) {
-         printTitle();
-         std::cout << (choice == -100 ? "\nPlease enter a number.\n" : "\nWhy would you do that?\n");
-         invalidChoice = true;
-         continue;
-      }
+      choice = validMenuInput(input, {0, 4});
+   } while (!choice.first);
 
-      //error2: incorrect number
-      invalidChoice = (choice < 0 || choice > 4);
-      if (invalidChoice) {
-         printTitle();
-         std::cout << "\nInvalid choice.\n";
-      }
-   } while (invalidChoice);
-
-   return choice;
+   return choice.second;
 }
 
 std::string getIDforShow() {
@@ -60,7 +64,6 @@ std::string getIDforShow() {
    return id;
 }
 
-/// @attention starts with \\n
 bool promptTryAgain() {
    std::string ans;
    std::cout << "\nInvalid input.";
@@ -79,7 +82,6 @@ bool promptTryAgain() {
       return promptTryAgain();
 }
 
-/// @param prompt (must end with \\n) What the user will be shown before asking (y\n)?
 bool promptTryAgain(std::string prompt) {
    std::string ans;
    std::cout << prompt << "Try again? (y/n) ";

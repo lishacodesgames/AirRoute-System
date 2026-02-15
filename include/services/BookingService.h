@@ -1,10 +1,18 @@
 #pragma once
+#include "core/Flight.h"
+#include "storage/FlightStorage.h"
 #include <string>
 #include <vector>
 
 class BookingService {
+   FlightStorage storage;
 public:
    void bookFlight();
    std::vector<std::string> getValidFlights(std::string depCity);
    std::vector<std::string> getValidFlights(std::string depCity, std::string arrCity);
+   std::vector<std::string> getAllFlights();
+
+   std::optional<Flight> getFlight(std::string id);
+
+   friend bool isValidCity(std::string city, BookingService& booker);
 };

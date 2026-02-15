@@ -13,6 +13,7 @@ void FlightStorage::initTextFiles(std::filesystem::path& BASE){
    textFiles = BASE / "text-files";
 }
 
+/// @return vector of string IDs
 std::vector<std::string> FlightStorage::getFlightIDs() {
    std::string ID;
    std::vector<std::string> flights = {};
