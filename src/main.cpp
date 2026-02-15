@@ -10,7 +10,12 @@
 
 enum class Choice {Exit, Book, ViewFlight, ViewBoardingPass, ViewAllFlights};
 
-int main() {
+int main(int argc, char* argv[]) {
+   if (argc < 2) {
+      std::cout << "NoNoNo\n";
+      return 1;
+   }
+
    std::srand(time(0));
    //declarations TODO
    Choice choice;

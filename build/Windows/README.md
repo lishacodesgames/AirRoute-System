@@ -1,27 +1,20 @@
 # How to Build on Windows
 Run the build.bat file
-<br>
-Can run only from repo or from build or Windows directory
 
 #### 2 ways to run batch file:
 <ol>
    <li> Normal Mode: Will show the files compiling as they compile </li>
-   <li> Quick Mode: append " quick" to normal run command to enable quick mode, will skip the outputs and directly compile into AirRouteSystem.exe </li>
+   <li> Quick Mode: append " quick" after batch script's filename to enable quick mode. This will skip the output of detailed steps and directly compile into AirRouteSystem </li>
 </ol>
 
-**Both work just fine. Depends on your patience / trust in your compiler**
+*Both work just fine. Depends on your patience / trust in your compiler*
 
-#### Skip the Batch file and directly run:
-`g++ -std=c++17 ..\..\src\services\*.cpp ..\..\src\storage\*.cpp ..\..\src\ui\*.cpp ..\..\src\utils\*.cpp ..\..\src\main.cpp -I..\..\include -o AirRouteSystem.exe`
-<br>
-(From build/Windows directory)
-<br> OR <br>
+## OR just paste this into your terminal to run:
+Note: after the main compilation command, there must be 2 directories are arguments for main: The executable's location, and the repository's location <br><br>
 
-`g++ -std=c++17 ..\src\services\*.cpp ..\src\storage\*.cpp ..\src\ui\*.cpp ..\src\utils\*.cpp ..\src\main.cpp -I..\include -o Windows\AirRouteSystem.exe`
-<br>
-(From build directory)
-<br> OR <br>
+**From Root Repo Directory** <br>
+` g++ -std=c++17 src\services\*.cpp src\storage\*.cpp src\ui\*.cpp src\utils\*.cpp src\main.cpp -Iinclude -o build\Windows\AirRouteSystem && "build\MacOS\AirRouteSystem.exe" "." `
+<br><br>
 
-`g++ -std=c++17 src\services\*.cpp src\storage\*.cpp src\ui\*.cpp src\utils\*.cpp src\main.cpp -Iinclude -o build\Windows\AirRouteSystem.exe`
-<br>
-(From repo root directory)
+**From build\Windows Directory** <br>
+` g++ -std=c++17 ..\..\src\services\*.cpp ..\..\src\storage\*.cpp ..\..\src\ui\*.cpp ..\..\src\utils\*.cpp ..\..\src\main.cpp -I..\..\include -o AirRouteSystem && "AirRouteSystem.exe" "..\.." `
