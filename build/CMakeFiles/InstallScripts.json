@@ -1,0 +1,12 @@
+{
+	"InstallScripts" : 
+	[
+		"C:/Users/patil/OneDrive/Desktop/Code/C++/Projects/AirRoute-System/build/cmake_install.cmake",
+		"C:/Users/patil/OneDrive/Desktop/Code/C++/Projects/AirRoute-System/build/src/cmake_install.cmake",
+		"C:/Users/patil/OneDrive/Desktop/Code/C++/Projects/AirRoute-System/build/src/services/cmake_install.cmake",
+		"C:/Users/patil/OneDrive/Desktop/Code/C++/Projects/AirRoute-System/build/src/storage/cmake_install.cmake",
+		"C:/Users/patil/OneDrive/Desktop/Code/C++/Projects/AirRoute-System/build/src/ui/cmake_install.cmake",
+		"C:/Users/patil/OneDrive/Desktop/Code/C++/Projects/AirRoute-System/build/src/utils/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

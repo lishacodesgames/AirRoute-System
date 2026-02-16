@@ -1,0 +1,2 @@
+C:\msys64\ucrt64\bin\ar.exe qc libmodule_utils.a CMakeFiles/module_utils.dir/ParseUtils.cpp.obj CMakeFiles/module_utils.dir/VectorUtils.cpp.obj
+C:\msys64\ucrt64\bin\ranlib.exe libmodule_utils.a

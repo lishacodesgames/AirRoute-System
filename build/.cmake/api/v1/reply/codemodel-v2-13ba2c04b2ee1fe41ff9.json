@@ -1,0 +1,197 @@
+{
+	"configurations" : 
+	[
+		{
+			"abstractTargets" : 
+			[
+				{
+					"directoryIndex" : 1,
+					"id" : "module_core::@145eef247bfb46b6828c",
+					"jsonFile" : "target-module_core-Debug-9c87f4f6fe57f2bccafd.json",
+					"name" : "module_core",
+					"projectIndex" : 0
+				}
+			],
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1
+					],
+					"jsonFile" : "directory-.-Debug-f6f22219c74102c3da70.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.15"
+					},
+					"projectIndex" : 0,
+					"source" : "."
+				},
+				{
+					"abstractTargetIndexes" : 
+					[
+						0
+					],
+					"build" : "src",
+					"childIndexes" : 
+					[
+						2,
+						3,
+						4,
+						5
+					],
+					"jsonFile" : "directory-src-Debug-1722085f943e0250936a.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.15"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "src",
+					"targetIndexes" : 
+					[
+						0
+					]
+				},
+				{
+					"build" : "src/services",
+					"jsonFile" : "directory-src.services-Debug-fb92811b8f687ace0fa1.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.15"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 0,
+					"source" : "src/services",
+					"targetIndexes" : 
+					[
+						1
+					]
+				},
+				{
+					"build" : "src/storage",
+					"jsonFile" : "directory-src.storage-Debug-c73535196c549c015028.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.15"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 0,
+					"source" : "src/storage",
+					"targetIndexes" : 
+					[
+						2
+					]
+				},
+				{
+					"build" : "src/ui",
+					"jsonFile" : "directory-src.ui-Debug-fb501b54488b11870b5a.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.15"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 0,
+					"source" : "src/ui",
+					"targetIndexes" : 
+					[
+						3
+					]
+				},
+				{
+					"build" : "src/utils",
+					"jsonFile" : "directory-src.utils-Debug-df79e0a6818982c5bbdb.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.15"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 0,
+					"source" : "src/utils",
+					"targetIndexes" : 
+					[
+						4
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"abstractTargetIndexes" : 
+					[
+						0
+					],
+					"directoryIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5
+					],
+					"name" : "AirRoute-System",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 1,
+					"id" : "AirRouteSystem::@145eef247bfb46b6828c",
+					"jsonFile" : "target-AirRouteSystem-Debug-7c7cf59310c4f1798de8.json",
+					"name" : "AirRouteSystem",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "module_services::@67f6f9a13eff1831414a",
+					"jsonFile" : "target-module_services-Debug-cd872811e9b34435ad05.json",
+					"name" : "module_services",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "module_storage::@f9bb3bf387c1b34d62bb",
+					"jsonFile" : "target-module_storage-Debug-5242ed88312e0f8a49e6.json",
+					"name" : "module_storage",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 4,
+					"id" : "module_ui::@e0ce1d6ecae3dc67b834",
+					"jsonFile" : "target-module_ui-Debug-705eb19c9ffae323763d.json",
+					"name" : "module_ui",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 5,
+					"id" : "module_utils::@f1b38b22aeb65474a6c5",
+					"jsonFile" : "target-module_utils-Debug-8de1be774e131909e32a.json",
+					"name" : "module_utils",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "C:/Users/patil/OneDrive/Desktop/Code/C++/Projects/AirRoute-System/build",
+		"source" : "C:/Users/patil/OneDrive/Desktop/Code/C++/Projects/AirRoute-System"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 9
+	}
+}

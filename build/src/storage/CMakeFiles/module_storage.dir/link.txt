@@ -1,0 +1,2 @@
+C:\msys64\ucrt64\bin\ar.exe qc libmodule_storage.a CMakeFiles/module_storage.dir/FlightStorage.cpp.obj CMakeFiles/module_storage.dir/PassengerStorage.cpp.obj
+C:\msys64\ucrt64\bin\ranlib.exe libmodule_storage.a

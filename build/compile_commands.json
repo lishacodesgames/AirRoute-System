@@ -1,0 +1,68 @@
+[
+{
+  "directory": "C:/Users/patil/OneDrive/Desktop/Code/C++/Projects/AirRoute-System/build/src",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe  @CMakeFiles/AirRouteSystem.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\AirRouteSystem.dir\\main.cpp.obj -c C:\\Users\\patil\\OneDrive\\Desktop\\Code\\C++\\Projects\\AirRoute-System\\src\\main.cpp",
+  "file": "C:/Users/patil/OneDrive/Desktop/Code/C++/Projects/AirRoute-System/src/main.cpp",
+  "output": "src/CMakeFiles/AirRouteSystem.dir/main.cpp.obj"
+},
+{
+  "directory": "C:/Users/patil/OneDrive/Desktop/Code/C++/Projects/AirRoute-System/build/src/services",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe  @CMakeFiles/module_services.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\module_services.dir\\BookingService.cpp.obj -c C:\\Users\\patil\\OneDrive\\Desktop\\Code\\C++\\Projects\\AirRoute-System\\src\\services\\BookingService.cpp",
+  "file": "C:/Users/patil/OneDrive/Desktop/Code/C++/Projects/AirRoute-System/src/services/BookingService.cpp",
+  "output": "src/services/CMakeFiles/module_services.dir/BookingService.cpp.obj"
+},
+{
+  "directory": "C:/Users/patil/OneDrive/Desktop/Code/C++/Projects/AirRoute-System/build/src/services",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe  @CMakeFiles/module_services.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\module_services.dir\\FlightGenerator.cpp.obj -c C:\\Users\\patil\\OneDrive\\Desktop\\Code\\C++\\Projects\\AirRoute-System\\src\\services\\FlightGenerator.cpp",
+  "file": "C:/Users/patil/OneDrive/Desktop/Code/C++/Projects/AirRoute-System/src/services/FlightGenerator.cpp",
+  "output": "src/services/CMakeFiles/module_services.dir/FlightGenerator.cpp.obj"
+},
+{
+  "directory": "C:/Users/patil/OneDrive/Desktop/Code/C++/Projects/AirRoute-System/build/src/storage",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe  @CMakeFiles/module_storage.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\module_storage.dir\\FlightStorage.cpp.obj -c C:\\Users\\patil\\OneDrive\\Desktop\\Code\\C++\\Projects\\AirRoute-System\\src\\storage\\FlightStorage.cpp",
+  "file": "C:/Users/patil/OneDrive/Desktop/Code/C++/Projects/AirRoute-System/src/storage/FlightStorage.cpp",
+  "output": "src/storage/CMakeFiles/module_storage.dir/FlightStorage.cpp.obj"
+},
+{
+  "directory": "C:/Users/patil/OneDrive/Desktop/Code/C++/Projects/AirRoute-System/build/src/storage",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe  @CMakeFiles/module_storage.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\module_storage.dir\\PassengerStorage.cpp.obj -c C:\\Users\\patil\\OneDrive\\Desktop\\Code\\C++\\Projects\\AirRoute-System\\src\\storage\\PassengerStorage.cpp",
+  "file": "C:/Users/patil/OneDrive/Desktop/Code/C++/Projects/AirRoute-System/src/storage/PassengerStorage.cpp",
+  "output": "src/storage/CMakeFiles/module_storage.dir/PassengerStorage.cpp.obj"
+},
+{
+  "directory": "C:/Users/patil/OneDrive/Desktop/Code/C++/Projects/AirRoute-System/build/src/ui",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe  @CMakeFiles/module_ui.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\module_ui.dir\\BookingUI.cpp.obj -c C:\\Users\\patil\\OneDrive\\Desktop\\Code\\C++\\Projects\\AirRoute-System\\src\\ui\\BookingUI.cpp",
+  "file": "C:/Users/patil/OneDrive/Desktop/Code/C++/Projects/AirRoute-System/src/ui/BookingUI.cpp",
+  "output": "src/ui/CMakeFiles/module_ui.dir/BookingUI.cpp.obj"
+},
+{
+  "directory": "C:/Users/patil/OneDrive/Desktop/Code/C++/Projects/AirRoute-System/build/src/ui",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe  @CMakeFiles/module_ui.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\module_ui.dir\\FlightUI.cpp.obj -c C:\\Users\\patil\\OneDrive\\Desktop\\Code\\C++\\Projects\\AirRoute-System\\src\\ui\\FlightUI.cpp",
+  "file": "C:/Users/patil/OneDrive/Desktop/Code/C++/Projects/AirRoute-System/src/ui/FlightUI.cpp",
+  "output": "src/ui/CMakeFiles/module_ui.dir/FlightUI.cpp.obj"
+},
+{
+  "directory": "C:/Users/patil/OneDrive/Desktop/Code/C++/Projects/AirRoute-System/build/src/ui",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe  @CMakeFiles/module_ui.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\module_ui.dir\\MenuUI.cpp.obj -c C:\\Users\\patil\\OneDrive\\Desktop\\Code\\C++\\Projects\\AirRoute-System\\src\\ui\\MenuUI.cpp",
+  "file": "C:/Users/patil/OneDrive/Desktop/Code/C++/Projects/AirRoute-System/src/ui/MenuUI.cpp",
+  "output": "src/ui/CMakeFiles/module_ui.dir/MenuUI.cpp.obj"
+},
+{
+  "directory": "C:/Users/patil/OneDrive/Desktop/Code/C++/Projects/AirRoute-System/build/src/ui",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe  @CMakeFiles/module_ui.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\module_ui.dir\\PassengerUI.cpp.obj -c C:\\Users\\patil\\OneDrive\\Desktop\\Code\\C++\\Projects\\AirRoute-System\\src\\ui\\PassengerUI.cpp",
+  "file": "C:/Users/patil/OneDrive/Desktop/Code/C++/Projects/AirRoute-System/src/ui/PassengerUI.cpp",
+  "output": "src/ui/CMakeFiles/module_ui.dir/PassengerUI.cpp.obj"
+},
+{
+  "directory": "C:/Users/patil/OneDrive/Desktop/Code/C++/Projects/AirRoute-System/build/src/utils",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe  @CMakeFiles/module_utils.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\module_utils.dir\\ParseUtils.cpp.obj -c C:\\Users\\patil\\OneDrive\\Desktop\\Code\\C++\\Projects\\AirRoute-System\\src\\utils\\ParseUtils.cpp",
+  "file": "C:/Users/patil/OneDrive/Desktop/Code/C++/Projects/AirRoute-System/src/utils/ParseUtils.cpp",
+  "output": "src/utils/CMakeFiles/module_utils.dir/ParseUtils.cpp.obj"
+},
+{
+  "directory": "C:/Users/patil/OneDrive/Desktop/Code/C++/Projects/AirRoute-System/build/src/utils",
+  "command": "C:\\msys64\\ucrt64\\bin\\g++.exe  @CMakeFiles/module_utils.dir/includes_CXX.rsp -g -std=gnu++17 -o CMakeFiles\\module_utils.dir\\VectorUtils.cpp.obj -c C:\\Users\\patil\\OneDrive\\Desktop\\Code\\C++\\Projects\\AirRoute-System\\src\\utils\\VectorUtils.cpp",
+  "file": "C:/Users/patil/OneDrive/Desktop/Code/C++/Projects/AirRoute-System/src/utils/VectorUtils.cpp",
+  "output": "src/utils/CMakeFiles/module_utils.dir/VectorUtils.cpp.obj"
+}
+]
