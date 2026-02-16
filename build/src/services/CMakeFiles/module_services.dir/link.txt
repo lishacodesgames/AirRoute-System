@@ -1,2 +1,0 @@
-C:\msys64\ucrt64\bin\ar.exe qc libmodule_services.a CMakeFiles/module_services.dir/BookingService.cpp.obj CMakeFiles/module_services.dir/FlightGenerator.cpp.obj
-C:\msys64\ucrt64\bin\ranlib.exe libmodule_services.a

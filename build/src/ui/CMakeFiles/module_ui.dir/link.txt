@@ -1,2 +1,0 @@
-C:\msys64\ucrt64\bin\ar.exe qc libmodule_ui.a CMakeFiles/module_ui.dir/BookingUI.cpp.obj CMakeFiles/module_ui.dir/FlightUI.cpp.obj CMakeFiles/module_ui.dir/MenuUI.cpp.obj CMakeFiles/module_ui.dir/PassengerUI.cpp.obj
-C:\msys64\ucrt64\bin\ranlib.exe libmodule_ui.a
