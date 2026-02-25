@@ -1,6 +1,5 @@
-.vscode/tasks.json
-.vscode/launch.json
+.vscode
 .DS_Store
 test.*
 desktop.ini
-build/*.o
+build
