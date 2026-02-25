@@ -51,6 +51,8 @@ int main(int argc, char* argv[]) {
 
             while(shouldContinue) {
                id = getIDforShow();
+               success = displayFlight(id);
+
                success = Fstorage.getFlightInfo(id);
                if(success) {
                   printTitle();

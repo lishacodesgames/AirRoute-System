@@ -6,4 +6,5 @@
 #include <iostream>
 
 void printFlightInfo(Flight& f);
+bool displayFlight(std::string ID);
 void displayAllFlights();

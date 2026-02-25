@@ -5,14 +5,32 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <optional>
 
-void printFlightInfo(Flight& f) {
-   std::cout << "Flight " << f.ID << "\n"
-   << f.origin << " -> " << f.destination << "\n"
-   << "Seats available: " << f.emptySeats << "/" << f.totalSeats << "\n"
-   << "Departing at " << f.departureTime << "\n"
-   << "Gate " << f.gate << "\t Terminal " << f.terminal << "\n";
+void printFlightInfo(Flight& flight) {
+   std::cout << "Flight " << flight.ID << "\n"
+   << flight.origin << " -> " << flight.destination << "\n"
+   << "Seats available: " << flight.emptySeats << "/" << flight.totalSeats << "\n"
+   << "Departing at " << flight.departureTime << "\n"
+   << "Gate " << flight.gate << "\t Terminal " << flight.terminal << "\n";
    std::cout << "===============================\n";
+}
+
+bool displayFlight(std::string ID) {
+   FlightStorage storage;
+   std::vector<std::string> allFlights = storage.getFlightIDs();
+   bool flightExists = false;
+   
+   std::optional<Flight> flight = storage.getFlightInfo(ID);
+
+   if(flight) {
+      printTitle();
+      printFlightInfo(flight.value());
+      std::cin.get();
+      return true;
+   }
+
+   return false;
 }
 
 void displayAllFlights() {

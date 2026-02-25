@@ -62,7 +62,6 @@ std::string getIDforShow() {
    printTitle();
    std::cout << "Enter flight ID: ";
    getline(std::cin, id);
-
    return id;
 }
 
