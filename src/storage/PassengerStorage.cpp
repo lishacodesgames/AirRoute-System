@@ -1,7 +1,8 @@
+#include <Precompiled.h> 
+#include <fstream>
+#include <string>
 #include "storage/PassengerStorage.h"
 #include "core/Passenger.h"
-#include <string>
-#include <fstream>
 
 bool PassengerStorage::getPassengerInfo(std::string name, Passenger& outputP) {
    std::string temp;

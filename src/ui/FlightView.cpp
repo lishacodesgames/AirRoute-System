@@ -1,10 +1,11 @@
+#include <Precompiled.h>
+#include <iostream>
+#include <string>
+#include <vector>
 #include "ui/FlightView.h"
 #include "ui/Menu.h"
 #include "core/Flight.h"
 #include "storage/FlightStorage.h"
-#include <vector>
-#include <string>
-#include <iostream>
 
 void printFlightInfo(Flight& f) {
    std::cout << "Flight " << f.ID << "\n"

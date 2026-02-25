@@ -1,8 +1,9 @@
+#include <Precompiled.h>
+#include <string>
+#include <vector>
 #include "services/FlightGenerator.h"
 #include "core/Flight.h"
 #include "storage/FlightStorage.h"
-#include <vector>
-#include <string>
 
 Flight FlightGenerator::generateRandom() {
    Flight f;

@@ -1,9 +1,10 @@
+#include <Precompiled.h>
+#include <fstream>
+#include <string>
+#include <vector>
 #include "storage/FlightStorage.h"
 #include "core/Flight.h"
 #include "utils/VectorUtils.h"
-#include <vector>
-#include <string>
-#include <fstream>
 
    std::vector<std::string> FlightStorage::getFlightIDs() {
       std::string ID;

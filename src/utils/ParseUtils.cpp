@@ -1,6 +1,7 @@
-#include "utils/ParseUtils.h"
-#include <iostream> // ik it's bad.
+#include <Precompiled.h>
 #include <stdexcept>
+#include <iostream> // ik it's bad.
+#include "utils/ParseUtils.h"
 
 /// @brief returns -100 if not number, 100 if out of range
 int parseInt(std::string input) {

@@ -1,9 +1,10 @@
+#include <Precompiled.h>
+#include <string>
+#include <vector>
 #include "services/BookingService.h"
 #include "core/Flight.h"
 #include "storage/FlightStorage.h"
 #include "ui/BookingView.h"
-#include <string>
-#include <vector>
 
 #include <iostream> //REMOVE REMOVE TODO TODO ATTENTIONS
 void BookingService::bookFlight() {

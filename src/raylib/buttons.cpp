@@ -1,6 +1,7 @@
-#include <raylib/raylib.h>
+#include <Precompiled.h>
+#include <raylib.h>
 
-int main() {
+int Main() {
   InitWindow(600, 600, "Buttons");
   SetTargetFPS(60);
 
@@ -17,4 +18,5 @@ int main() {
 
   UnloadTexture(background);
   CloseWindow();
+  return 0;
 }

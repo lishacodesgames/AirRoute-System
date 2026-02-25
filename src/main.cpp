@@ -1,3 +1,27 @@
+#include <Precompiled.h>
+#include <raylib.h>
+
+int main() {
+   InitWindow(736, 458, "Testing"); // that's the background image's dimensions
+   SetTargetFPS(60);
+
+   Texture2D background = LoadTexture("assets/bg.jpg");
+
+   while(!WindowShouldClose()) {
+      BeginDrawing();
+      ClearBackground(PINK);
+      DrawTexture(background, 0, 0, WHITE);
+      DrawText("Hello World!", 180, 250, 40, BLACK);
+      EndDrawing();
+   }
+
+   UnloadTexture(background);
+   CloseWindow();
+   return 0;
+}
+
+#if 0
+
 #include "ui/Menu.h"
 #include "ui/FlightView.h"
 #include "ui/PassengerView.h"
@@ -7,9 +31,7 @@
 #include "core/Flight.h"
 #include <cstdlib>
 #include <ctime>
-
 enum class Choice {Exit, Book, ViewFlight, ViewBoardingPass, ViewAllFlights};
-
 int main() {
    std::srand(time(0));
    //declarations TODO
@@ -77,3 +99,5 @@ int main() {
 
    return 0;
 }
+
+#endif

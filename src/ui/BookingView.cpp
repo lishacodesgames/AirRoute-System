@@ -1,3 +1,7 @@
+#include <Precompiled.h>
+#include <iostream>
+#include <string>
+#include <vector>
 #include "ui/BookingView.h"
 #include "ui/FlightView.h"
 #include "ui/Menu.h"
@@ -6,9 +10,6 @@
 #include "storage/FlightStorage.h"
 #include "utils/ParseUtils.h"
 #include "utils/VectorUtils.h"
-#include <iostream>
-#include <string>
-#include <vector>
 
 /// @param type "origin" OR "destination" gets printed in the prompt
 std::string getCity(std::string type) {

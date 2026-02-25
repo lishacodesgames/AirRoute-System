@@ -1,10 +1,11 @@
+#include <Precompiled.h>
+#include <iostream>
 #include "ui/PassengerView.h"
 #include "ui/Menu.h"
 #include "core/Passenger.h"
 #include "core/Flight.h"
 #include "storage/PassengerStorage.h"
 #include "storage/FlightStorage.h"
-#include <iostream>
 
 bool displayBoardingPass() {
    std::string temp, name;
