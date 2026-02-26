@@ -1,4 +1,5 @@
-#include <Precompiled.h>
+#define RAYGUI_IMPLEMENTATION
+#include <Precompiled.h> // has raygui
 #include <raylib.h>
 
 int main() {
@@ -9,9 +10,12 @@ int main() {
 
    while(!WindowShouldClose()) {
       BeginDrawing();
-      ClearBackground(PINK);
+      ClearBackground(WHITE);
+
       DrawTexture(background, 0, 0, WHITE);
       DrawText("Hello World!", 180, 250, 40, BLACK);
+      GuiButton({0, 0, 100, 100}, "THIS IS A BUTTON");
+
       EndDrawing();
    }
 
