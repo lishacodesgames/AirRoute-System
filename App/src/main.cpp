@@ -1,4 +1,3 @@
-#define RAYGUI_IMPLEMENTATION
 #include <Precompiled.h> // has raygui
 #include <raylib.h>
 

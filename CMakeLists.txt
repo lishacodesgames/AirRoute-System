@@ -1,5 +1,4 @@
 cmake_minimum_required(VERSION 3.20)
-
 project(AirRoute LANGUAGES C CXX)
 
 set(CMAKE_C_STANDARD 99) # raylib
@@ -11,4 +10,5 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 
 add_subdirectory(raylib)
-add_subdirectory(src)
+add_subdirectory(GUI)
+add_subdirectory(App)
