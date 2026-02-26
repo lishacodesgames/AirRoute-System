@@ -345,20 +345,7 @@
 #define RAYGUI_VERSION_PATCH 0
 #define RAYGUI_VERSION  "5.0-dev"
 
-#if !defined(RAYGUI_STANDALONE)
-    #include "raylib.h"
-#endif
-
-// Function specifiers in case library is build/used as a shared library (Windows)
-// NOTE: Microsoft specifiers to tell compiler that symbols are imported/exported from a .dll
-#if defined(_WIN32)
-    #if defined(BUILD_LIBTYPE_SHARED)
-        #define RAYGUIAPI __declspec(dllexport)     // Building the library as a Win32 shared library (.dll)
-    #elif defined(USE_LIBTYPE_SHARED)
-        #define RAYGUIAPI __declspec(dllimport)     // Using the library as a Win32 shared library (.dll)
-    #endif
-    #define _CRT_SECURE_NO_WARNINGS                 // Disable unsafe warnings on scanf() functions in MSVC
-#endif
+#include <raylib.h>
 
 // Function specifiers definition
 #ifndef RAYGUIAPI
@@ -418,87 +405,7 @@
 
 //----------------------------------------------------------------------------------
 // Types and Structures Definition
-// NOTE: Some types are required for RAYGUI_STANDALONE usage
 //----------------------------------------------------------------------------------
-#if defined(RAYGUI_STANDALONE)
-    #ifndef __cplusplus
-    // Boolean type
-        #ifndef true
-            typedef enum { false, true } bool;
-        #endif
-    #endif
-
-    // Vector2 type
-    typedef struct Vector2 {
-        float x;
-        float y;
-    } Vector2;
-
-    // Vector3 type                 // -- ConvertHSVtoRGB(), ConvertRGBtoHSV()
-    typedef struct Vector3 {
-        float x;
-        float y;
-        float z;
-    } Vector3;
-
-    // Color type, RGBA (32bit)
-    typedef struct Color {
-        unsigned char r;
-        unsigned char g;
-        unsigned char b;
-        unsigned char a;
-    } Color;
-
-    // Rectangle type
-    typedef struct Rectangle {
-        float x;
-        float y;
-        float width;
-        float height;
-    } Rectangle;
-
-    // TODO: Texture2D type is very coupled to raylib, required by Font type
-    // It should be redesigned to be provided by user
-    typedef struct Texture {
-        unsigned int id;        // OpenGL texture id
-        int width;              // Texture base width
-        int height;             // Texture base height
-        int mipmaps;            // Mipmap levels, 1 by default
-        int format;             // Data format (PixelFormat type)
-    } Texture;
-
-    // Texture2D, same as Texture
-    typedef Texture Texture2D;
-
-    // Image, pixel data stored in CPU memory (RAM)
-    typedef struct Image {
-        void *data;             // Image raw data
-        int width;              // Image base width
-        int height;             // Image base height
-        int mipmaps;            // Mipmap levels, 1 by default
-        int format;             // Data format (PixelFormat type)
-    } Image;
-
-    // GlyphInfo, font characters glyphs info
-    typedef struct GlyphInfo {
-        int value;              // Character value (Unicode)
-        int offsetX;            // Character offset X when drawing
-        int offsetY;            // Character offset Y when drawing
-        int advanceX;           // Character advance position X
-        Image image;            // Character image data
-    } GlyphInfo;
-
-    // TODO: Font type is very coupled to raylib, mostly required by GuiLoadStyle()
-    // It should be redesigned to be provided by user
-    typedef struct Font {
-        int baseSize;           // Base size (default chars height)
-        int glyphCount;         // Number of glyph characters
-        int glyphPadding;       // Padding around the glyph characters
-        Texture2D texture;      // Texture atlas containing the glyphs
-        Rectangle *recs;        // Rectangles in texture for the glyphs
-        GlyphInfo *glyphs;      // Glyphs info data
-    } Font;
-#endif
 
 // Style property
 // NOTE: Used when exporting style as code for convenience
@@ -1076,9 +983,9 @@ typedef enum {
     ICON_254                      = 254,
     ICON_255                      = 255
 } GuiIconName;
-#endif
+#endif // RAYGUI_CUSTOM_ICONS
 
-#endif
+#endif // RAYGUI_NO_ICONS
 
 #if defined(__cplusplus)
 }            // Prevents name mangling of functions
@@ -1465,79 +1372,6 @@ static int autoCursorCounter = 0;               // Frame counter for automatic r
 static unsigned int guiStyle[RAYGUI_MAX_CONTROLS*(RAYGUI_MAX_PROPS_BASE + RAYGUI_MAX_PROPS_EXTENDED)] = { 0 };
 
 static bool guiStyleLoaded = false;         // Style loaded flag for lazy style initialization
-
-//----------------------------------------------------------------------------------
-// Standalone Mode Functions Declaration
-//
-// NOTE: raygui depend on some raylib input and drawing functions
-// To use raygui as standalone library, below functions must be defined by the user
-//----------------------------------------------------------------------------------
-#if defined(RAYGUI_STANDALONE)
-
-#define KEY_RIGHT           262
-#define KEY_LEFT            263
-#define KEY_DOWN            264
-#define KEY_UP              265
-#define KEY_BACKSPACE       259
-#define KEY_ENTER           257
-
-#define MOUSE_LEFT_BUTTON     0
-
-// Input required functions
-//-------------------------------------------------------------------------------
-static Vector2 GetMousePosition(void);
-static float GetMouseWheelMove(void);
-static bool IsMouseButtonDown(int button);
-static bool IsMouseButtonPressed(int button);
-static bool IsMouseButtonReleased(int button);
-
-static bool IsKeyDown(int key);
-static bool IsKeyPressed(int key);
-static int GetCharPressed(void); // -- GuiTextBox(), GuiValueBox()
-//-------------------------------------------------------------------------------
-
-// Drawing required functions
-//-------------------------------------------------------------------------------
-static void DrawRectangle(int x, int y, int width, int height, Color color); // -- GuiDrawRectangle()
-static void DrawRectangleGradientEx(Rectangle rec, Color col1, Color col2, Color col3, Color col4); // -- GuiColorPicker()
-//-------------------------------------------------------------------------------
-
-// Text required functions
-//-------------------------------------------------------------------------------
-static Font GetFontDefault(void);                            // -- GuiLoadStyleDefault()
-static Font LoadFontEx(const char *fileName, int fontSize, int *codepoints, int codepointCount); // -- GuiLoadStyle(), load font
-
-static Texture2D LoadTextureFromImage(Image image);          // -- GuiLoadStyle(), required to load texture from embedded font atlas image
-static void SetShapesTexture(Texture2D tex, Rectangle rec);  // -- GuiLoadStyle(), required to set shapes rec to font white rec (optimization)
-
-static char *LoadFileText(const char *fileName);             // -- GuiLoadStyle(), required to load charset data
-static void UnloadFileText(char *text);                      // -- GuiLoadStyle(), required to unload charset data
-
-static const char *GetDirectoryPath(const char *filePath);   // -- GuiLoadStyle(), required to find charset/font file from text .rgs
-
-static int *LoadCodepoints(const char *text, int *count);    // -- GuiLoadStyle(), required to load required font codepoints list
-static void UnloadCodepoints(int *codepoints);               // -- GuiLoadStyle(), required to unload codepoints list
-
-static unsigned char *DecompressData(const unsigned char *compData, int compDataSize, int *dataSize); // -- GuiLoadStyle()
-//-------------------------------------------------------------------------------
-
-// raylib functions already implemented in raygui
-//-------------------------------------------------------------------------------
-static Color GetColor(int hexValue);                // Returns a Color struct from hexadecimal value
-static int ColorToInt(Color color);                 // Returns hexadecimal value for a Color
-static bool CheckCollisionPointRec(Vector2 point, Rectangle rec);   // Check if point is inside rectangle
-static const char *TextFormat(const char *text, ...);               // Formatting of text with variables to 'embed'
-static char **TextSplit(const char *text, char delimiter, int *count);    // Split text into multiple strings
-static int TextToInteger(const char *text);         // Get integer value from text
-static float TextToFloat(const char *text);         // Get float value from text
-
-static int GetCodepointNext(const char *text, int *codepointSize);  // Get next codepoint in a UTF-8 encoded text
-static const char *CodepointToUTF8(int codepoint, int *byteSize);   // Encode codepoint into UTF-8 text (char array size returned as parameter)
-
-static void DrawRectangleGradientV(int posX, int posY, int width, int height, Color color1, Color color2);  // Draw rectangle vertical gradient
-//-------------------------------------------------------------------------------
-
-#endif      // RAYGUI_STANDALONE
 
 //----------------------------------------------------------------------------------
 // Module Internal Functions Declaration
@@ -4756,9 +4590,7 @@ void GuiDrawIcon(int iconId, int posX, int posY, int pixelSize, Color color)
         {
             if (BIT_CHECK(guiIconsPtr[iconId*RAYGUI_ICON_DATA_ELEMENTS + i], k))
             {
-            #if !defined(RAYGUI_STANDALONE)
                 GuiDrawRectangle(RAYGUI_CLITERAL(Rectangle){ (float)posX + (k%RAYGUI_ICON_SIZE)*pixelSize, (float)posY + y*pixelSize, (float)pixelSize, (float)pixelSize }, 0, BLANK, color);
-            #endif
             }
 
             if ((k == 15) || (k == 31)) y++;
@@ -4885,7 +4717,6 @@ static void GuiLoadStyleFromMemory(const unsigned char *fileData, int dataSize)
 
         // Font loading is highly dependant on raylib API to load font data and image
 
-#if !defined(RAYGUI_STANDALONE)
         // Load custom font if available
         int fontDataSize = 0;
         memcpy(&fontDataSize, fileDataPtr, sizeof(int));
@@ -5057,7 +4888,6 @@ static void GuiLoadStyleFromMemory(const unsigned char *fileData, int dataSize)
                 (fontWhiteRec.width > 0) &&
                 (fontWhiteRec.height > 0)) SetShapesTexture(font.texture, fontWhiteRec);
         }
-#endif
     }
 }
 
@@ -5813,239 +5643,5 @@ static Color GuiFade(Color color, float alpha)
 
     return result;
 }
-
-#if defined(RAYGUI_STANDALONE)
-// Returns a Color struct from hexadecimal value
-static Color GetColor(int hexValue)
-{
-    Color color;
-
-    color.r = (unsigned char)(hexValue >> 24) & 0xff;
-    color.g = (unsigned char)(hexValue >> 16) & 0xff;
-    color.b = (unsigned char)(hexValue >> 8) & 0xff;
-    color.a = (unsigned char)hexValue & 0xff;
-
-    return color;
-}
-
-// Returns hexadecimal value for a Color
-static int ColorToInt(Color color)
-{
-    return (((int)color.r << 24) | ((int)color.g << 16) | ((int)color.b << 8) | (int)color.a);
-}
-
-// Check if point is inside rectangle
-static bool CheckCollisionPointRec(Vector2 point, Rectangle rec)
-{
-    bool collision = false;
-
-    if ((point.x >= rec.x) && (point.x <= (rec.x + rec.width)) &&
-        (point.y >= rec.y) && (point.y <= (rec.y + rec.height))) collision = true;
-
-    return collision;
-}
-
-// Formatting of text with variables to 'embed'
-static const char *TextFormat(const char *text, ...)
-{
-    #if !defined(RAYGUI_TEXTFORMAT_MAX_SIZE)
-        #define RAYGUI_TEXTFORMAT_MAX_SIZE   256
-    #endif
-
-    static char buffer[RAYGUI_TEXTFORMAT_MAX_SIZE];
-
-    va_list args;
-    va_start(args, text);
-    vsnprintf(buffer, RAYGUI_TEXTFORMAT_MAX_SIZE, text, args);
-    va_end(args);
-
-    return buffer;
-}
-
-// Draw rectangle with vertical gradient fill color
-// NOTE: This function is only used by GuiColorPicker()
-static void DrawRectangleGradientV(int posX, int posY, int width, int height, Color color1, Color color2)
-{
-    Rectangle bounds = { (float)posX, (float)posY, (float)width, (float)height };
-    DrawRectangleGradientEx(bounds, color1, color2, color2, color1);
-}
-
-// Split string into multiple strings
-char **TextSplit(const char *text, char delimiter, int *count)
-{
-    // NOTE: Current implementation returns a copy of the provided string with '\0' (string end delimiter)
-    // inserted between strings defined by "delimiter" parameter. No memory is dynamically allocated,
-    // all used memory is static... it has some limitations:
-    //      1. Maximum number of possible split strings is set by RAYGUI_TEXTSPLIT_MAX_ITEMS
-    //      2. Maximum size of text to split is RAYGUI_TEXTSPLIT_MAX_TEXT_SIZE
-
-    #if !defined(RAYGUI_TEXTSPLIT_MAX_ITEMS)
-        #define RAYGUI_TEXTSPLIT_MAX_ITEMS          128
-    #endif
-    #if !defined(RAYGUI_TEXTSPLIT_MAX_TEXT_SIZE)
-        #define RAYGUI_TEXTSPLIT_MAX_TEXT_SIZE      1024
-    #endif
-
-    static const char *result[RAYGUI_TEXTSPLIT_MAX_ITEMS] = { NULL };
-    static char buffer[RAYGUI_TEXTSPLIT_MAX_TEXT_SIZE] = { 0 };
-    memset(buffer, 0, RAYGUI_TEXTSPLIT_MAX_TEXT_SIZE);
-
-    result[0] = buffer;
-    int counter = 0;
-
-    if (text != NULL)
-    {
-        counter = 1;
-
-        // Count how many substrings text contains and point to every one of them
-        for (int i = 0; i < RAYGUI_TEXTSPLIT_MAX_TEXT_SIZE; i++)
-        {
-            buffer[i] = text[i];
-            if (buffer[i] == '\0') break;
-            else if (buffer[i] == delimiter)
-            {
-                buffer[i] = '\0';   // Set an end of string at this point
-                result[counter] = buffer + i + 1;
-                counter++;
-
-                if (counter == RAYGUI_TEXTSPLIT_MAX_ITEMS) break;
-            }
-        }
-    }
-
-    *count = counter;
-    return result;
-}
-
-// Get integer value from text
-// NOTE: This function replaces atoi() [stdlib.h]
-static int TextToInteger(const char *text)
-{
-    int value = 0;
-    int sign = 1;
-
-    if ((text[0] == '+') || (text[0] == '-'))
-    {
-        if (text[0] == '-') sign = -1;
-        text++;
-    }
-
-    for (int i = 0; ((text[i] >= '0') && (text[i] <= '9')); i++) value = value*10 + (int)(text[i] - '0');
-
-    return value*sign;
-}
-
-// Get float value from text
-// NOTE: This function replaces atof() [stdlib.h]
-// WARNING: Only '.' character is understood as decimal point
-static float TextToFloat(const char *text)
-{
-    float value = 0.0f;
-    float sign = 1.0f;
-
-    if ((text[0] == '+') || (text[0] == '-'))
-    {
-        if (text[0] == '-') sign = -1.0f;
-        text++;
-    }
-
-    int i = 0;
-    for (; ((text[i] >= '0') && (text[i] <= '9')); i++) value = value*10.0f + (float)(text[i] - '0');
-
-    if (text[i++] != '.') value *= sign;
-    else
-    {
-        float divisor = 10.0f;
-        for (; ((text[i] >= '0') && (text[i] <= '9')); i++)
-        {
-            value += ((float)(text[i] - '0'))/divisor;
-            divisor = divisor*10.0f;
-        }
-    }
-
-    return value;
-}
-
-// Encode codepoint into UTF-8 text (char array size returned as parameter)
-static const char *CodepointToUTF8(int codepoint, int *byteSize)
-{
-    static char utf8[6] = { 0 };
-    int size = 0;
-
-    if (codepoint <= 0x7f)
-    {
-        utf8[0] = (char)codepoint;
-        size = 1;
-    }
-    else if (codepoint <= 0x7ff)
-    {
-        utf8[0] = (char)(((codepoint >> 6) & 0x1f) | 0xc0);
-        utf8[1] = (char)((codepoint & 0x3f) | 0x80);
-        size = 2;
-    }
-    else if (codepoint <= 0xffff)
-    {
-        utf8[0] = (char)(((codepoint >> 12) & 0x0f) | 0xe0);
-        utf8[1] = (char)(((codepoint >>  6) & 0x3f) | 0x80);
-        utf8[2] = (char)((codepoint & 0x3f) | 0x80);
-        size = 3;
-    }
-    else if (codepoint <= 0x10ffff)
-    {
-        utf8[0] = (char)(((codepoint >> 18) & 0x07) | 0xf0);
-        utf8[1] = (char)(((codepoint >> 12) & 0x3f) | 0x80);
-        utf8[2] = (char)(((codepoint >>  6) & 0x3f) | 0x80);
-        utf8[3] = (char)((codepoint & 0x3f) | 0x80);
-        size = 4;
-    }
-
-    *byteSize = size;
-
-    return utf8;
-}
-
-// Get next codepoint in a UTF-8 encoded text, scanning until '\0' is found
-// When a invalid UTF-8 byte is encountered, exiting as soon as possible and returning a '?'(0x3f) codepoint
-// Total number of bytes processed are returned as a parameter
-// NOTE: The standard says U+FFFD should be returned in case of errors
-// but that character is not supported by the default font in raylib
-static int GetCodepointNext(const char *text, int *codepointSize)
-{
-    const char *ptr = text;
-    int codepoint = 0x3f;       // Codepoint (defaults to '?')
-    *codepointSize = 1;
-
-    // Get current codepoint and bytes processed
-    if (0xf0 == (0xf8 & ptr[0]))
-    {
-        // 4 byte UTF-8 codepoint
-        if (((ptr[1] & 0xC0) ^ 0x80) || ((ptr[2] & 0xC0) ^ 0x80) || ((ptr[3] & 0xC0) ^ 0x80)) { return codepoint; } //10xxxxxx checks
-        codepoint = ((0x07 & ptr[0]) << 18) | ((0x3f & ptr[1]) << 12) | ((0x3f & ptr[2]) << 6) | (0x3f & ptr[3]);
-        *codepointSize = 4;
-    }
-    else if (0xe0 == (0xf0 & ptr[0]))
-    {
-        // 3 byte UTF-8 codepoint
-        if (((ptr[1] & 0xC0) ^ 0x80) || ((ptr[2] & 0xC0) ^ 0x80)) { return codepoint; } //10xxxxxx checks
-        codepoint = ((0x0f & ptr[0]) << 12) | ((0x3f & ptr[1]) << 6) | (0x3f & ptr[2]);
-        *codepointSize = 3;
-    }
-    else if (0xc0 == (0xe0 & ptr[0]))
-    {
-        // 2 byte UTF-8 codepoint
-        if ((ptr[1] & 0xC0) ^ 0x80) { return codepoint; } //10xxxxxx checks
-        codepoint = ((0x1f & ptr[0]) << 6) | (0x3f & ptr[1]);
-        *codepointSize = 2;
-    }
-    else if (0x00 == (0x80 & ptr[0]))
-    {
-        // 1 byte UTF-8 codepoint
-        codepoint = ptr[0];
-        *codepointSize = 1;
-    }
-
-    return codepoint;
-}
-#endif      // RAYGUI_STANDALONE
 
 #endif      // RAYGUI_IMPLEMENTATION

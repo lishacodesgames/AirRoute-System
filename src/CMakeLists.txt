@@ -30,6 +30,7 @@ target_precompile_headers(${PROJECT_NAME} PRIVATE
 add_library(header_only_libs INTERFACE
    ${PROJECT_SOURCE_DIR}/include/core/Flight.h
    ${PROJECT_SOURCE_DIR}/include/core/Passenger.h
+   ${PROJECT_SOURCE_DIR}/include/raygui.h
 )
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_SOURCE_DIR}/include)
 target_link_libraries(${PROJECT_NAME} PRIVATE raylib header_only_libs)
